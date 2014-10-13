@@ -9,7 +9,8 @@ public class HomeModel {
 	
 	public static void Load()
 	{
-		loadedHome = HomeXmlReader.ReadXML(Util.GetProjectPath()+"/src/homeTest1.xml");
+		
+		loadedHome = HomeXmlReader.ReadXML(Util.GetProjectPath()+"homeTest1.xml");
 	}
 	
 }
