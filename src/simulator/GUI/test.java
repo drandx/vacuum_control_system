@@ -1,4 +1,4 @@
-package simulator.UI;
+package simulator.GUI;
 
 public class test {
 
