@@ -1,19 +1,26 @@
 package simulator.main;
-import simulator.model.Home;
+import simulator.model.Cell;
 import simulator.model.HomeModel;
-import simulator.util.*;
 public class Main {
 
-	public static void main(String[] args) {
-		
-		//Reads the file located in: .../vacuum_control_system/src/
-		String filePath = Util.GetProjectPath()+"src\\homeTest1.xml";		
-		String fileContent = Util.FromFileToString(filePath);
-		HomeModel home = new HomeModel();
-		System.out.println(filePath);
-		Home myHome = HomeXmlReader.ReadXML(filePath);
-		System.out.println("...");
-
+	public static void main(String[] args) 
+	{	
+		HomeModel.Load();
+		System.out.println("Home Plan Loaded!");
+		System.out.println("Floors Number: "+HomeModel.loadedHome.getFloors().size());
+		for(int i=0; i < HomeModel.loadedHome.getFloors().size(); i++)
+		{
+			System.out.println("Floor "+HomeModel.loadedHome.getFloors().get(i).getFloor());
+			for(int j = 0; j < HomeModel.loadedHome.getFloors().get(i).getCells().size(); j++)
+			{
+				Cell currentCell = HomeModel.loadedHome.getFloors().get(i).getCells().get(j);
+				System.out.println("xs "+currentCell.getXs());
+				System.out.println("ys "+currentCell.getYs());
+				System.out.println("cs "+currentCell.getCs());
+				System.out.println("ps "+currentCell.getPs());
+				System.out.println("ds "+currentCell.getDs());
+			}
+		}
 	}
 
 }
