@@ -15,8 +15,9 @@ public class MapHistory {
 	public void addHistory(coordPair history) {
 		historyMap.add(history);
 		
-		//In here we will need to update distToHome every time we add a new History Point so
-		//we know how many movements it will take to get to the base station
+		//Distance to charing station is just the total sum of the X and Y coordinates its currently on.
+		distToHome = Math.abs(history.getX()) + Math.abs(history.getY());
+		
 	}
 	
 	public int getDistToHome() {
