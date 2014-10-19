@@ -6,6 +6,9 @@ public class MapHistory {
     
     private ArrayDeque<coordPair> historyMap;
     private int distToHome;
+    private PathCalculator path;
+    private int maxX = 0;
+    private int maxY = 0;
     
 
     //History Constructor
@@ -18,7 +21,15 @@ public class MapHistory {
         
         //Closest Distance to charging station is just the total sum of the X and Y coordinates its currently on.
         //This will be the min battery it needs to get to charging station
-        distToHome = Math.abs(history.getX()) + Math.abs(history.getY());
+        
+        //I think this distToHome should be calculated using BFS every time we add a history?
+        //distToHome should just be the size of the shortest path array that we obtain from doing BFS
+        //distToHome = Math.abs(history.getX()) + Math.abs(history.getY());
+        
+        path = new PathCalculator();
+        
+        distToHome = path.getPathHome(historyMap).size();
+        
     }
     
     public ArrayDeque<coordPair> getHistoryMap(){

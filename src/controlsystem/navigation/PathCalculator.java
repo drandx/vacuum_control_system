@@ -7,23 +7,53 @@ public class PathCalculator {
     //private ArrayDeque<coordPair> m_pathHome; probably unneeded.
     
     private coordPair m_chargerLoc;
+    private static final int INFINITY = Integer.MAX_VALUE;
+    private boolean[][] marked;  // marked[v] = is there an s-v path
+    private coordPair[][] edgeTo;      // edgeTo[v] = previous edge on shortest s-v path
+    private int[][] distTo;      // distTo[v] = number of edges shortest s-v path
     
-    public PathCalculator( coordPair homeIn ){
+    public PathCalculator() {
+    //public PathCalculator( coordPair homeIn ){
          //m_knownPath = pathHistory;
-         m_chargerLoc = homeIn;
+    	 //Do we need this? I think the charger location is always at 0,0
+         //m_chargerLoc = homeIn;
     }
     
     // calculates the shortest path to the charging station, using BreathFirstSearch
     // TODO - this is called when the battery is 'critical'
     public ArrayDeque<coordPair> getPathHome( ArrayDeque<coordPair> knownCells ){
     	coordPair root = knownCells.pop();
+    	marked = new boolean[knownCells.size()][knownCells.size()];
+        distTo = new int[knownCells.size()][knownCells.size()];
+        edgeTo = new coordPair[knownCells.size()][knownCells.size()];
     	
     	return BFS( knownCells, root );
     }
     
     //Breadth-first-search
-    private ArrayDeque<coordPair> BFS( ArrayDeque<coordPair> graph, coordPair node ){
+    private ArrayDeque<coordPair> BFS( ArrayDeque<coordPair> graph, coordPair node ) {
+    	
     	ArrayDeque<coordPair> pathHome = new ArrayDeque<coordPair>();
+    	
+    	for (int v = 0; v < graph.size(); v++) {
+    		for (int z = 0; z < graph.size(); z++)
+    			distTo[v][z] = INFINITY;
+    	}
+        distTo[node.getX()][node.getY()] = 0;
+        marked[node.getX()][node.getY()] = true;
+        pathHome.add(node);
+
+        while (!pathHome.isEmpty()) {
+            coordPair pair = pathHome.remove();
+            for (coordPair w : getNeighboringCells(graph, pair)) {
+                if (!marked[w.getX()][w.getY()]) {
+                    edgeTo[w.getX()][w.getY()] = pair;
+                    distTo[w.getX()][w.getY()] = distTo[pair.getX()][pair.getY()] + 1;
+                    marked[w.getX()][w.getY()] = true;
+                    pathHome.add(w);
+                }
+            }
+        }
     	
     	//TODO - implement BFS...
     	
