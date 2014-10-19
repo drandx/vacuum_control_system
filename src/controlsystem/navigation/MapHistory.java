@@ -21,7 +21,7 @@ public class MapHistory {
         distToHome = Math.abs(history.getX()) + Math.abs(history.getY());
     }
     
-    public ArrayDeque getHistoryMap(){
+    public ArrayDeque<coordPair> getHistoryMap(){
         return historyMap;
     }
     
