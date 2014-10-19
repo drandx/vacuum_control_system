@@ -23,15 +23,20 @@ public class PathCalculator {
     // calculates the shortest path to the charging station, using BreathFirstSearch
     // TODO - this is called when the battery is 'critical'
     public ArrayDeque<coordPair> getPathHome( ArrayDeque<coordPair> knownCells ){
+    	
+    	ArrayDeque<coordPair> pathHome = new ArrayDeque<coordPair>();
+    	
     	coordPair root = knownCells.getFirst();
     	marked = new boolean[knownCells.size()][knownCells.size()];
         distTo = new int[knownCells.size()][knownCells.size()];
-        //edgeTo = new coordPair[knownCells.size()][knownCells.size()];
         edgeTo = new ArrayDeque<coordPair>();
     	
-    	BFS( knownCells, root );
+    	pathHome = BFS( knownCells, root );
+    	
+    	for (coordPair point : pathHome)
+    		System.out.println("next cell to get back is (" + Integer.toString(point.getX()) + "," + Integer.toString(point.getY()) + ")");
    
-    	return edgeTo;
+    	return pathHome;
     }
     
     //Breadth-first-search
@@ -51,7 +56,6 @@ public class PathCalculator {
             coordPair pair = pathHome.remove();
             for (coordPair w : getNeighboringCells(graph, pair)) {
                 if (!marked[w.getX()][w.getY()]) {
-                    //edgeTo[w.getX()][w.getY()] = pair;
                 	edgeTo.add(pair);
                     distTo[w.getX()][w.getY()] = distTo[pair.getX()][pair.getY()] + 1;
                     marked[w.getX()][w.getY()] = true;
@@ -62,7 +66,7 @@ public class PathCalculator {
     	
     	//TODO - implement BFS...
     	
-    	return pathHome;
+    	return edgeTo;
     }
     
     // This is essentially the 'getChildrenOfNode' method in BFS
