@@ -22,7 +22,7 @@ public class PathCalculator {
     // calculates the shortest path to the charging station, using BreathFirstSearch
     // TODO - this is called when the battery is 'critical'
     public ArrayDeque<coordPair> getPathHome( ArrayDeque<coordPair> knownCells ){
-    	coordPair root = knownCells.pop();
+    	coordPair root = knownCells.getFirst();
     	marked = new boolean[knownCells.size()][knownCells.size()];
         distTo = new int[knownCells.size()][knownCells.size()];
         edgeTo = new coordPair[knownCells.size()][knownCells.size()];

@@ -7,8 +7,6 @@ public class MapHistory {
     private ArrayDeque<coordPair> historyMap;
     private int distToHome;
     private PathCalculator path;
-    private int maxX = 0;
-    private int maxY = 0;
     
 
     //History Constructor
