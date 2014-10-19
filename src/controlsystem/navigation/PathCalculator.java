@@ -9,7 +9,8 @@ public class PathCalculator {
     private coordPair m_chargerLoc;
     private static final int INFINITY = Integer.MAX_VALUE;
     private boolean[][] marked;  // marked[v] = is there an s-v path
-    private coordPair[][] edgeTo;      // edgeTo[v] = previous edge on shortest s-v path
+    //private coordPair[][] edgeTo;      // edgeTo[v] = previous edge on shortest s-v path
+    private ArrayDeque<coordPair> edgeTo;      // edgeTo[v] = previous edge on shortest s-v path
     private int[][] distTo;      // distTo[v] = number of edges shortest s-v path
     
     public PathCalculator() {
@@ -25,9 +26,12 @@ public class PathCalculator {
     	coordPair root = knownCells.getFirst();
     	marked = new boolean[knownCells.size()][knownCells.size()];
         distTo = new int[knownCells.size()][knownCells.size()];
-        edgeTo = new coordPair[knownCells.size()][knownCells.size()];
+        //edgeTo = new coordPair[knownCells.size()][knownCells.size()];
+        edgeTo = new ArrayDeque<coordPair>();
     	
-    	return BFS( knownCells, root );
+    	BFS( knownCells, root );
+   
+    	return edgeTo;
     }
     
     //Breadth-first-search
@@ -47,7 +51,8 @@ public class PathCalculator {
             coordPair pair = pathHome.remove();
             for (coordPair w : getNeighboringCells(graph, pair)) {
                 if (!marked[w.getX()][w.getY()]) {
-                    edgeTo[w.getX()][w.getY()] = pair;
+                    //edgeTo[w.getX()][w.getY()] = pair;
+                	edgeTo.add(pair);
                     distTo[w.getX()][w.getY()] = distTo[pair.getX()][pair.getY()] + 1;
                     marked[w.getX()][w.getY()] = true;
                     pathHome.add(w);

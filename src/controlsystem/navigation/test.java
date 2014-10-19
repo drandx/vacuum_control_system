@@ -36,12 +36,12 @@ public class test {
 	System.out.println("distance to charging station " + map.getDistToHome());
 	map.addHistory(p3);
 	System.out.println("distance to charging station " + map.getDistToHome());
-	/*map.addHistory(p4);
+	map.addHistory(p4);
 	System.out.println("distance to charging station " + map.getDistToHome());
 	map.addHistory(p5);
 	System.out.println("distance to charging station " + map.getDistToHome());
 	map.addHistory(p6);
-	System.out.println("distance to charging station " + map.getDistToHome());*/
+	System.out.println("distance to charging station " + map.getDistToHome());
 	
 	}
 
