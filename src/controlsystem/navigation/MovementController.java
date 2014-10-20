@@ -24,9 +24,9 @@ public class MovementController {
 		//TODO-Verify with the power management system if there is enough energy to perform an action
 		//TODO-Invoke the tracking path system
 		
+		//TODO-Log the movement - from what cell to what cell
+		
 		//TODO-Validate what position to move according to each cell state.
-		
-		
 	}
 
 }
