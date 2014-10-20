@@ -8,27 +8,44 @@ public class Cell
 {
 	coordPair Position;
 	int DirtUnits;
-	int SurfaceType;
+	SurfaceType SurfaceType;
 	Boolean isStation;
 	CellState State;
-	List<Cell> AdjacentCells;
+	List<Cell> AdjacentCells;	
+	
 	
 	public Cell()
 	{
-		this.AdjacentCells = new ArrayList<Cell>();
-		this.DirtUnits = -1;
-		this.SurfaceType = -1;
+		this.AdjacentCells = new ArrayList<Cell>(4);
+		this.DirtUnits = -1;		
 		this.isStation = false;
 		this.Position = new coordPair();
 	}
 	
-	public Cell(coordPair position, int dirtUnits, int surfaceType,Boolean isStation) {
-		Position = position;
-		DirtUnits = dirtUnits;
-		SurfaceType = surfaceType;
-		this.isStation = isStation;
+	
+	public Cell getLeftCell()
+	{
+		return AdjacentCells.get(1);
 	}
 	
+	
+	public Cell getRightCell()
+	{
+		return AdjacentCells.get(0);
+	}
+	
+	public Cell getTopCell()
+	{
+		return AdjacentCells.get(2);
+	}
+	
+	public Cell getBottomCell()
+	{
+		return AdjacentCells.get(3);
+	
+	}
+	
+
 	public coordPair getPosition() {
 		return Position;
 	}
@@ -45,11 +62,11 @@ public class Cell
 		DirtUnits = dirtUnits;
 	}
 	
-	public int getSurfaceType() {
+	public SurfaceType getSurfaceType() {
 		return SurfaceType;
 	}
 	
-	public void setSurfaceType(int surfaceType) {
+	public void setSurfaceType(SurfaceType surfaceType) {
 		SurfaceType = surfaceType;
 	}
 	

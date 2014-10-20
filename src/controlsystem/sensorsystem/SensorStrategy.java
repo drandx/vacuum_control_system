@@ -1,4 +1,4 @@
-package controlsystem.sensorssystem;
+package controlsystem.sensorsystem;
 
 import controlsystem.model.Cell;
 import controlsystem.navigation.coordPair;
