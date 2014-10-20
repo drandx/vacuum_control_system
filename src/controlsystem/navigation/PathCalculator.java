@@ -57,7 +57,7 @@ public class PathCalculator {
             for (coordPair w : getNeighboringCells(graph, pair)) {
                 if (!marked[w.getX()][w.getY()]) {
                 	
-                	if( !isCellKnown( edgeTo, pair ) ) //<== added
+                	if( !isCellKnown( edgeTo, pair ) ) //<== FIXED
                 		edgeTo.add(pair);
                 	else //<== v and these two
                 		System.out.println( "Duplicate cell not added." );
@@ -72,6 +72,11 @@ public class PathCalculator {
     }
     
     // This is essentially the 'getChildrenOfNode' method in BFS
+    // IMPORTANT NOTE IMPORTANT NOTE IMPORTANT NOTE IMPORTANT NOTE IMPORTANT NOTE IMPORTANT NOTE IMPORTANT NOTE IMPORTANT NOTE
+    // THIS DOES NOT CHECK TO SEE IF A CELL HAS ALREADY BEEN ADDED.  SEPERATE CALLS CAN YEILD THE SAME CELL BEING NEIGHBOR'D, WHICH
+    // SLIGHTLY BREAKS BREADTH-FIRST-SEARCH.
+    // This has been fixed by the commented line 'FIXED' above.
+    // FIXME if there is time, clean this up and enable that functionality.
     private ArrayDeque<coordPair> getNeighboringCells( ArrayDeque<coordPair> knownCells, coordPair cell ){
     	ArrayDeque<coordPair> neighbors = new ArrayDeque<coordPair>();
     	
