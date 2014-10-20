@@ -12,6 +12,7 @@ public class SimulatorStrategy implements SensorStrategy{
 	 */
 	public Cell getCell(coordPair position) {
 		HomeModel.Load();
+		controlsystem.model.Cell newCell = new Cell();
 		
 		for(FloorLevel floor : HomeModel.loadedHome.getFloors())
 		{
@@ -19,13 +20,13 @@ public class SimulatorStrategy implements SensorStrategy{
 			{
 				if((cell.getXs() == position.getX()) && (cell.getYs() == position.getY()))
 				{
-					controlsystem.model.Cell newCell = new Cell();
+					
 					if(position.getX() == 0 && position.getY() == 0)
 						newCell.setState(CellState.OPEN);
 					newCell.setDirtUnits(cell.getDs());
 					newCell.setIsStation(cell.getCs() == 1 ? true : false);
 					newCell.setPosition(position);
-					newCell.setSurfaceType(SurfaceType.get(cell.getSs()));
+					newCell.setSurfaceType(SurfaceType.getStatus(cell.getSs()));
 					
 					String path = cell.getPs();
 					
@@ -55,19 +56,19 @@ public class SimulatorStrategy implements SensorStrategy{
 						}
 						
 						adjCell.setPosition(new coordPair(x,y));
-						
-						adjCell.setState(CellState.get(path.charAt(i)));
+						CellState state = CellState.getStatus(Character.getNumericValue(path.charAt(i)));						
+						adjCell.setState(state);
 						newCell.getAdjacentCells().add(i, adjCell);
 					}
 					
-					break;
+					break;					
 				}
 			
 			}
 			
 		}
 		
-		return null;
+		return newCell;
 	}	
 	
 	
