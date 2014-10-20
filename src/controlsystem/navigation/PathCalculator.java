@@ -56,16 +56,18 @@ public class PathCalculator {
             coordPair pair = pathHome.remove();
             for (coordPair w : getNeighboringCells(graph, pair)) {
                 if (!marked[w.getX()][w.getY()]) {
-                	edgeTo.add(pair);
+                	
+                	if( !isCellKnown( edgeTo, pair ) ) //<== added
+                		edgeTo.add(pair);
+                	else //<== v and these two
+                		System.out.println( "Duplicate cell not added." );
+                	
                     distTo[w.getX()][w.getY()] = distTo[pair.getX()][pair.getY()] + 1;
                     marked[w.getX()][w.getY()] = true;
                     pathHome.add(w);
                 }
             }
         }
-    	
-    	//TODO - implement BFS...
-    	
     	return edgeTo;
     }
     
@@ -104,6 +106,9 @@ public class PathCalculator {
         for( coordPair coord : knownCells ){
             if( cellsAreEqual( cell, coord ) ){
                 cellIsKnown = true;
+                //System.out.println( "Compare: " );
+                //System.out.println( "Cell: " + cell.getX() + "," + cell.getY() );
+                //System.out.println( "OtherCell: " + coord.getX() + "," + coord.getY() );
                 break;
             }
         }
