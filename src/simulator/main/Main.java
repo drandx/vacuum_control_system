@@ -1,10 +1,15 @@
 package simulator.main;
 import simulator.model.Cell;
 import simulator.model.HomeModel;
+
+import simulator.GUI.GUIWindow;
+
 public class Main {
 
 	public static void main(String[] args) 
 	{	
+		
+		GUIWindow newWindow = new GUIWindow();
 		HomeModel.Load();
 		System.out.println("Home Plan Loaded!");
 		System.out.println("Floors Number: "+HomeModel.loadedHome.getFloors().size());
@@ -21,6 +26,9 @@ public class Main {
 				System.out.println("ds "+currentCell.getDs());
 			}
 		}
+		
+		newWindow.moveVacuum();
+		
 	}
 
 }
