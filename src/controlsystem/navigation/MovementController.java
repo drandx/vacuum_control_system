@@ -30,9 +30,9 @@ public class MovementController {
 		
 		for(Cell adjCell : currentLocation.getAdjacentCells())
 		{
-			if(adjCell.getState() == CellState.OPEN)
+			if((adjCell.getState() == CellState.OPEN) || (adjCell.getState() == CellState.UNKNOWN))
 			{
-				//Change the current location and with this.sensor.getCell(adjCell.getPosition()) gets the adjacent cells
+				//Changes the current location. "this.sensor.getCell(adjCell.getPosition())" gets the adjacent cells
 				this.currentLocation = this.sensor.getCell(adjCell.getPosition());
 				break;
 			}
