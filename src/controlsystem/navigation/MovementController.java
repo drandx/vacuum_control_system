@@ -25,7 +25,11 @@ public class MovementController {
 		this.currentLocation = currentLocation;
 	}
 	
-	public void MoveToNextPosition()
+	/**
+	 * Returns false if there is not enough battery or there are no available cells to move to.
+	 * @return
+	 */
+	public boolean MoveToNextPosition()
 	{
 		
 		//TODO - Get path to the station and Remove dummy path to go back to the station
@@ -39,7 +43,7 @@ public class MovementController {
 			dummyCell.setState(CellState.OPEN);
 			pathToStation.add(dummyCell);
 		}
-		
+		boolean moved = false;
 		for(Cell adjCell : currentLocation.getAdjacentCells())
 		{
 			if(((adjCell.getState() == CellState.OPEN) || (adjCell.getState() == CellState.UNKNOWN)))
@@ -51,12 +55,15 @@ public class MovementController {
 					PowerController.ReduceCharge(this.currentLocation, fullCell);
 					//Changes the current location. "this.sensor.getCell(adjCell.getPosition())" gets the adjacent cells
 					this.currentLocation = fullCell;
+					moved = true;
 					break;
 				}
 				
 			}
 		
 		}
+		
+		return moved;
 	}
 	
 	
