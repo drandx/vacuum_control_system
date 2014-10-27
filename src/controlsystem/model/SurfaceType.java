@@ -63,5 +63,6 @@ public enum SurfaceType {
     public static void main(String[] args) {
         System.out.println(SurfaceType.LOW_PILE_FLOOR);
         System.out.println(SurfaceType.getStatus(1));
+        System.out.println(SurfaceType.getStatus(2).getCode());
     }
 }
