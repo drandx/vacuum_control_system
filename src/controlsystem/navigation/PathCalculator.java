@@ -1,80 +1,98 @@
 package controlsystem.navigation;
 
 import java.util.ArrayDeque;
+import java.util.PriorityQueue;
+import java.util.Comparator;
+import controlsystem.model.Cell;
 
 public class PathCalculator {
 	
-    //private ArrayDeque<coordPair> m_pathHome; probably unneeded.
-    
-    private coordPair m_chargerLoc;
     private static final int INFINITY = Integer.MAX_VALUE;
-    private boolean[][] marked;  // marked[v] = is there an s-v path
-    //private coordPair[][] edgeTo;      // edgeTo[v] = previous edge on shortest s-v path
-    private ArrayDeque<coordPair> edgeTo;      // edgeTo[v] = previous edge on shortest s-v path
-    private int[][] distTo;      // distTo[v] = number of edges shortest s-v path
+    private int[][] dist;
+    private coordPair[][] prev;
+    private PriorityQueue<Cell> pq;
+    private boolean[][] marked;
     
     public PathCalculator() {
-    //public PathCalculator( coordPair homeIn ){
-         //m_knownPath = pathHistory;
-    	 //Do we need this? I think the charger location is always at 0,0
-         //m_chargerLoc = homeIn;
+    	
     }
     
-    // calculates the shortest path to the charging station, using BreathFirstSearch
+  //Comparator anonymous class implementation
+    public static Comparator<Cell> distComparator = new Comparator<Cell>(){
+         
+        @Override
+        public int compare(Cell c1, Cell c2) {
+            return (c1.getSurfaceType().getCode() - c2.getSurfaceType().getCode());
+        }
+    };
+    
+    public coordPair[][] getPath() {
+    	return prev;
+    }
+    
+    // calculates the shortest path to the charging station, using Dijkstra
     // TODO - this is called when the battery is 'critical'
-    public ArrayDeque<coordPair> getPathHome( ArrayDeque<coordPair> knownCells ){
+    public void getPathHome( ArrayDeque<coordPair> knownCells ){
     	
     	ArrayDeque<coordPair> pathHome = new ArrayDeque<coordPair>();
     	
     	coordPair root = knownCells.getFirst();
-    	marked = new boolean[knownCells.size()][knownCells.size()];
-        distTo = new int[knownCells.size()][knownCells.size()];
-        edgeTo = new ArrayDeque<coordPair>();
+        dist = new int[knownCells.size()][knownCells.size()];
+        prev = new coordPair[knownCells.size()][knownCells.size()];
+        
+        marked = new boolean[knownCells.size()][knownCells.size()];
+        pq = new PriorityQueue<Cell>(knownCells.size(), distComparator);
     	
-    	pathHome = BFS( knownCells, root );
+    	Dijkstra(knownCells, root);
     	
     	for (coordPair point : pathHome)
     		System.out.println("next cell to get back is (" + Integer.toString(point.getX()) + "," + Integer.toString(point.getY()) + ")");
-   
-    	return pathHome;
     }
     
-    //Breadth-first-search
-    private ArrayDeque<coordPair> BFS( ArrayDeque<coordPair> graph, coordPair node ) {
+    //Dijkstra
+    private coordPair[][] Dijkstra( ArrayDeque<coordPair> graph, coordPair source ) {
     	
-    	ArrayDeque<coordPair> pathHome = new ArrayDeque<coordPair>();
+    	dist[source.getX()][source.getY()] = 0;
     	
     	for (int v = 0; v < graph.size(); v++) {
-    		for (int z = 0; z < graph.size(); z++)
-    			distTo[v][z] = INFINITY;
+    		for (int z = 0; z < graph.size(); z++) {
+    			if (v != source.getX() && z != source.getY()) {
+    				dist[v][z] = INFINITY;
+    				prev[v][z] = null;
+    			}
+    		Cell c = new Cell();
+    		coordPair pair = new coordPair();
+    		pair.setX(v);
+    		pair.setY(z);
+    		c.setPosition(pair);
+    		pq.add(c);
+    		}		
     	}
-        distTo[node.getX()][node.getY()] = 0;
-        marked[node.getX()][node.getY()] = true;
-        pathHome.add(node);
 
-        while (!pathHome.isEmpty()) {
-            coordPair pair = pathHome.remove();
-            for (coordPair w : getNeighboringCells(graph, pair)) {
-                if (!marked[w.getX()][w.getY()]) {
-                	
-                	if( !isCellKnown( edgeTo, pair ) ) //<== FIXED
-                		edgeTo.add(pair);
-                	else //<== v and these two
-                		System.out.println( "Duplicate cell not added." );
-                	
-                    distTo[w.getX()][w.getY()] = distTo[pair.getX()][pair.getY()] + 1;
-                    marked[w.getX()][w.getY()] = true;
-                    pathHome.add(w);
+        while (!pq.isEmpty()) {
+        	int newDist;
+            Cell cell = pq.remove();
+            marked[cell.getPosition().getX()][cell.getPosition().getY()] = true;
+            coordPair pair = new coordPair();
+            pair.setX(cell.getPosition().getX());
+            pair.setY(cell.getPosition().getY());
+            for (Cell c : getNeighboringCells(graph, pair)) { //Fix this calculation to return a queue of cells not coordPairs
+                if (!marked[c.getPosition().getX()][c.getPosition().getY()]) {
+                	newDist = (dist[pair.getX()][pair.getY()]) + c.getSurfaceType().getCode();
+                	if (newDist < dist[c.getPosition().getX()][c.getPosition().getY()]) {
+                		dist[c.getPosition().getX()][c.getPosition().getY()] = newDist;
+                		prev[c.getPosition().getX()][c.getPosition().getY()] = cell.getPosition(); //should change priority based on comparator
+                	}
                 }
             }
         }
-    	return edgeTo;
+    	return prev;
     }
     
-    // This is essentially the 'getChildrenOfNode' method in BFS
+    // This is essentially the 'getChildrenOfNode' method in Dijkstra
     // IMPORTANT NOTE IMPORTANT NOTE IMPORTANT NOTE IMPORTANT NOTE IMPORTANT NOTE IMPORTANT NOTE IMPORTANT NOTE IMPORTANT NOTE
     // THIS DOES NOT CHECK TO SEE IF A CELL HAS ALREADY BEEN ADDED.  SEPERATE CALLS CAN YEILD THE SAME CELL BEING NEIGHBOR'D, WHICH
-    // SLIGHTLY BREAKS BREADTH-FIRST-SEARCH.
+    // SLIGHTLY BREAKS DIJKSTRA.
     // This has been fixed by the commented line 'FIXED' above.
     // FIXME if there is time, clean this up and enable that functionality.
     private ArrayDeque<coordPair> getNeighboringCells( ArrayDeque<coordPair> knownCells, coordPair cell ){

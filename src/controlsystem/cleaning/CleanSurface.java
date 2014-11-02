@@ -1,26 +1,28 @@
 package controlsystem.cleaning;
 
-import controlsystem.model.SurfaceType;
+import controlsystem.model.Cell;
+import controlsystem.power.PowerController;
+import controlsystem.navigation.PathCalculator;
 
 public class CleanSurface {
 	
-	private SurfaceType surface;
+	Cell currentLocation;
+	PathCalculator mapHome;
 	
 	public CleanSurface () {
 		
 	}
 
-	public void clean(SurfaceType  type) {
-		this.surface = type;
-		//check if bag is full if not add one to bag, if full return to charing station
-		if(surface.getCode() == 1) {
-			//subtract 1 from battery
-		}
-		else if(surface.getCode() == 2) {
-			//subtract 2 from battery
-		}
-		else {
-			//subtract 3 from battery
-		}
+	public void clean(Cell current) {
+		this.currentLocation = current;
+		if(DirtBag.getCurrentDirt() == 50) {
+			//return to charing station using Pathfinder path
+		} else
+			while(true) { //while detects dirt
+				//if has power to move
+					PowerController.ReduceCharge(currentLocation, currentLocation);
+				//else
+					//return to charing station
+			}
 	}
 }
