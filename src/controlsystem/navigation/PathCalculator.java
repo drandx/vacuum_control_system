@@ -56,6 +56,8 @@ public class PathCalculator {
     	dist[source.getPosition().getX()][source.getPosition().getY()] = 0;
     	//dist.put(source, 0);
     	
+    	ArrayDeque<Cell> searchedCells = new ArrayDeque<Cell>();
+    	
     	for(Cell c : graph) {
     		if (c != source) {
     			dist[c.getPosition().getX()][c.getPosition().getY()] = INFINITY;
@@ -70,7 +72,8 @@ public class PathCalculator {
             Cell cell = pq.remove();
             cell.setMarked(true);
             for (Cell c : getNeighboringCells( graph, cell )) {
-                if (!c.getMarked()) { //KEEP GETTING NULL FOR SOME REASON!!!
+                if ( !c.getMarked() && !isCellKnown( searchedCells, c ) ) {
+                	searchedCells.add( c );
                 	int newDist = (dist[cell.getPosition().getX()][cell.getPosition().getY()]) + c.getSurfaceType().getCode();
                 	System.out.println("new Dist = " + newDist);
                 	if (newDist < dist[c.getPosition().getX()][c.getPosition().getY()]) {
@@ -120,7 +123,6 @@ public class PathCalculator {
     }
     
     // Checks if a cell is 'known' - has the robot traversed through this cell?
-    // TODO: May not be needed, anymore
     private boolean isCellKnown( ArrayDeque<Cell> knownCells, Cell cell ) {
         boolean cellIsKnown = false;
         
