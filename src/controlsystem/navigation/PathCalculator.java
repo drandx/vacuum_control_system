@@ -3,6 +3,7 @@ package controlsystem.navigation;
 import java.util.ArrayDeque;
 import java.util.PriorityQueue;
 import java.util.Comparator;
+
 import controlsystem.model.Cell;
 
 public class PathCalculator {
@@ -12,19 +13,22 @@ public class PathCalculator {
     private ArrayDeque<Cell> prev;
     private PriorityQueue<Cell> pq;
     private boolean[][] marked;
+    Comparator<Cell> distComparator;
     
     public PathCalculator() {
     	
     }
     
   //Comparator anonymous class implementation
-    public static Comparator<Cell> distComparator = new Comparator<Cell>(){
+    /*public static Comparator<Cell> distComparator = new Comparator<Cell>(){
          
         @Override
         public int compare(Cell c1, Cell c2) {
+        	System.out.println("code = " + c1.getSurfaceType().getCode());
+        	System.out.println("code = " + c2.getSurfaceType().getCode());
             return (c1.getSurfaceType().getCode() - c2.getSurfaceType().getCode());
         }
-    };
+    };*/
     
     public ArrayDeque<Cell> getPath() {
     	return prev;
@@ -34,11 +38,10 @@ public class PathCalculator {
     // TODO - this is called when the battery is 'critical'
     public void getPathHome( ArrayDeque<Cell> knownCells ){
     	
-    	//ArrayDeque<coordPair> pathHome = new ArrayDeque<coordPair>();
-    	
     	Cell root = knownCells.getFirst();
         dist = new int[knownCells.size()][knownCells.size()];
         prev = new ArrayDeque<Cell>();
+        distComparator = new surfaceComparator();
         
         marked = new boolean[knownCells.size()][knownCells.size()];
         pq = new PriorityQueue<Cell>(knownCells.size(), distComparator);
