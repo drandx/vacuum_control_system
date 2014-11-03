@@ -102,12 +102,12 @@ public class PathCalculator {
     // SLIGHTLY BREAKS DIJKSTRA.
     // This has been fixed by the commented line 'FIXED' above.
     // FIXME if there is time, clean this up and enable that functionality.
-    private ArrayDeque<Cell> getNeighboringCells( ArrayDeque<coordPair> knownCells, Cell cell ){
+    private ArrayDeque<Cell> getNeighboringCells( ArrayDeque<Cell> knownCells, Cell cell ){
     	ArrayDeque<Cell> neighbors = new ArrayDeque<Cell>();
     	
     	for( Cell adjacent : cell.getAdjacentCells() ) {
     		
-    		if( isCellKnown( knownCells, adjacent.getPosition() ) )
+    		if( isCellKnown( knownCells, adjacent ) )
     			neighbors.add( adjacent );
     	}
     	
@@ -115,11 +115,11 @@ public class PathCalculator {
     }
     
     // Checks if a cell is 'known' - has the robot traversed through this cell?
-    private boolean isCellKnown( ArrayDeque<coordPair> knownCells, coordPair cell ){
+    private boolean isCellKnown( ArrayDeque<Cell> knownCells, Cell cell ){
         boolean cellIsKnown = false;
         
         // because we don't care about efficiency, yet.
-        for( coordPair coord : knownCells ){
+        for( Cell coord : knownCells ){
             if( cellsAreEqual( cell, coord ) ){
                 cellIsKnown = true;
                 //System.out.println( "Compare: " );
@@ -132,7 +132,7 @@ public class PathCalculator {
     }
     
     // are two cells equal?
-    private boolean cellsAreEqual( coordPair cell1, coordPair cell2 ){
-    	return ( cell1.getX() == cell2.getX() ) && ( cell1.getY() == cell2.getY() );
+    private boolean cellsAreEqual( Cell cell1, Cell cell2 ){
+    	return ( cell1.getPosition().getX() == cell2.getPosition().getX() ) && ( cell1.getPosition().getY() == cell2.getPosition().getY() );
     }
 }
