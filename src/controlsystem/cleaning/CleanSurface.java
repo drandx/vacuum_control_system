@@ -1,28 +1,31 @@
 package controlsystem.cleaning;
 
+import java.util.LinkedList;
+
 import controlsystem.model.Cell;
 import controlsystem.power.PowerController;
+import controlsystem.navigation.MapHistory;
+import controlsystem.navigation.MovementController;
 import controlsystem.navigation.PathCalculator;
 
 public class CleanSurface {
 	
 	Cell currentLocation;
-	PathCalculator mapHome;
-	
-	public CleanSurface () {
-		
-	}
+	Cell home = new Cell(0,0);
+	MovementController mover = new MovementController();
 
-	public void clean(Cell current) {
+	public void clean(Cell current, LinkedList<Cell>pathToStation) {
 		this.currentLocation = current;
 		if(DirtBag.getCurrentDirt() == 50) {
-			//return to charing station using Pathfinder path
+			mover.MoveToNextPosition(); //TODO input pathToStation
 		} else
-			while(true) { //while detects dirt
-				//if has power to move
-					PowerController.ReduceCharge(currentLocation, currentLocation);
-				//else
-					//return to charing station
+			while(current.getDirtUnits() > 0) {
+				if(PowerController.ValidateChargeToMove(pathToStation, home)) { //need path to station still
+					DirtBag.addDirt();
+					currentLocation.setDirtUnits(currentLocation.getDirtUnits() - 1);
+				}else {
+					mover.MoveToNextPosition(); //TODO input pathToStatio
+				}
 			}
 	}
 }
