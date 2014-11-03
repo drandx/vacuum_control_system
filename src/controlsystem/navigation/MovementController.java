@@ -49,6 +49,9 @@ public class MovementController {
 			if(((adjCell.getState() == CellState.OPEN) || (adjCell.getState() == CellState.UNKNOWN)))
 			{
 				Cell fullCell = this.sensor.getCellDetail(adjCell.getPosition());
+				// TODO: May have to do things with PowerController to use our PathCalculator and determine if it can move or head home...?
+				// And then, that's where a flag is raised to say, 'hey, cleaning was interrupted and should be resumed'
+				// a similar thing should be added to the 'dirt bag' controller thing
 				if(PowerController.ValidateChargeToMove(pathToStation, fullCell))
 				{
 					//TODO-Log the movement - from what cell to what cell
