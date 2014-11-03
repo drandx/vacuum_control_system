@@ -23,17 +23,17 @@ public class Cell
 	}
 	
 	public Cell( int x, int y ) {
-		this.AdjacentCells = populateAdjacentCells();
 		this.DirtUnits = -1;		
 		this.isStation = false;
 		this.Position = new coordPair( x, y );
+		this.AdjacentCells = populateAdjacentCells();
 	}
 	
 	public Cell( coordPair coords ) {
-		this.AdjacentCells = populateAdjacentCells();
 		this.DirtUnits = -1;		
 		this.isStation = false;
 		this.Position = coords;
+		this.AdjacentCells = populateAdjacentCells();
 	}
 	
 	public Cell getLeftCell() {
