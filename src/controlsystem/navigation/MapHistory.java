@@ -2,8 +2,11 @@ package controlsystem.navigation;
 
 import java.util.ArrayDeque;
 
+import controlsystem.model.Cell;
+
 public class MapHistory {
     
+    //private ArrayDeque<coordPair> historyMap;
     private ArrayDeque<coordPair> historyMap;
     private int distToHome;
     private PathCalculator path;
@@ -25,10 +28,10 @@ public class MapHistory {
         //distToHome = Math.abs(history.getX()) + Math.abs(history.getY());
         
         path = new PathCalculator();
+        path.getPathHome(historyMap);
+        distToHome = path.getPath().size();
         
-        distToHome = path.getPathHome(historyMap).size();
-        
-    }
+    } 
     
     public ArrayDeque<coordPair> getHistoryMap(){
         return historyMap;

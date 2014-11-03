@@ -9,7 +9,7 @@ public class PathCalculator {
 	
     private static final int INFINITY = Integer.MAX_VALUE;
     private int[][] dist;
-    private coordPair[][] prev;
+    private ArrayDeque<Cell> prev;
     private PriorityQueue<Cell> pq;
     private boolean[][] marked;
     
@@ -26,7 +26,7 @@ public class PathCalculator {
         }
     };
     
-    public coordPair[][] getPath() {
+    public ArrayDeque<Cell> getPath() {
     	return prev;
     }
     
@@ -34,31 +34,34 @@ public class PathCalculator {
     // TODO - this is called when the battery is 'critical'
     public void getPathHome( ArrayDeque<coordPair> knownCells ){
     	
-    	ArrayDeque<coordPair> pathHome = new ArrayDeque<coordPair>();
+    	//ArrayDeque<coordPair> pathHome = new ArrayDeque<coordPair>();
     	
     	coordPair root = knownCells.getFirst();
         dist = new int[knownCells.size()][knownCells.size()];
-        prev = new coordPair[knownCells.size()][knownCells.size()];
+        prev = new ArrayDeque<Cell>();
         
         marked = new boolean[knownCells.size()][knownCells.size()];
         pq = new PriorityQueue<Cell>(knownCells.size(), distComparator);
     	
     	Dijkstra(knownCells, root);
-    	
-    	for (coordPair point : pathHome)
-    		System.out.println("next cell to get back is (" + Integer.toString(point.getX()) + "," + Integer.toString(point.getY()) + ")");
     }
     
     //Dijkstra
-    private coordPair[][] Dijkstra( ArrayDeque<coordPair> graph, coordPair source ) {
+    private ArrayDeque<Cell> Dijkstra( ArrayDeque<coordPair> graph, coordPair source ) {
     	
     	dist[source.getX()][source.getY()] = 0;
+    	Cell cell = new Cell();
+		coordPair p = new coordPair();
+		p.setX(source.getX());
+		p.setY(source.getY());
+		cell.setPosition(p);
+    	prev.add(cell);
+    	
     	
     	for (int v = 0; v < graph.size(); v++) {
     		for (int z = 0; z < graph.size(); z++) {
     			if (v != source.getX() && z != source.getY()) {
     				dist[v][z] = INFINITY;
-    				prev[v][z] = null;
     			}
     		Cell c = new Cell();
     		coordPair pair = new coordPair();
@@ -71,12 +74,12 @@ public class PathCalculator {
 
         while (!pq.isEmpty()) {
         	int newDist;
-            Cell cell = pq.remove();
-            marked[cell.getPosition().getX()][cell.getPosition().getY()] = true;
+            Cell pqCell = pq.remove();
+            marked[pqCell.getPosition().getX()][pqCell.getPosition().getY()] = true;
             coordPair pair = new coordPair();
-            pair.setX(cell.getPosition().getX());
-            pair.setY(cell.getPosition().getY());
-            for (Cell c : cell.getAdjacentCells()) {
+            pair.setX(pqCell.getPosition().getX());
+            pair.setY(pqCell.getPosition().getY());
+            for (Cell c : pqCell.getAdjacentCells()) {
             	coordPair adjPair = new coordPair();
             	adjPair.setX(c.getPosition().getX());
             	adjPair.setY(c.getPosition().getY());
@@ -84,7 +87,7 @@ public class PathCalculator {
                 	newDist = (dist[pair.getX()][pair.getY()]) + c.getSurfaceType().getCode();
                 	if (newDist < dist[c.getPosition().getX()][c.getPosition().getY()]) {
                 		dist[c.getPosition().getX()][c.getPosition().getY()] = newDist;
-                		prev[c.getPosition().getX()][c.getPosition().getY()] = cell.getPosition(); //should change priority based on comparator
+                		prev.add(cell);
                 		pq.add(c);
                 	}
                 }

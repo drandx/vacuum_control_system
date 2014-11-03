@@ -1,34 +1,24 @@
 package controlsystem.navigation;
 
-import simulator.model.Cell;
-import simulator.model.HomeModel;
+import controlsystem.model.Cell;
+import controlsystem.model.SurfaceType;
 
 public class test {
 
 	public static void main(String[] args) {
-	/*HomeModel.Load();
-		MapHistory map = new MapHistory();
-		for(int i=0; i < HomeModel.loadedHome.getFloors().size(); i++)
-		{
-			for(int j = 0; j < HomeModel.loadedHome.getFloors().get(i).getCells().size(); j++)
-			{
-				Cell currentCell = HomeModel.loadedHome.getFloors().get(i).getCells().get(j);
-				
-				coordPair pair = new coordPair();
-				pair.setX(currentCell.getXs());
-				pair.setY(currentCell.getYs());
-				
-				map.addHistory(pair);
-				System.out.println(map.getDistToHome());
-			}
-		}*/
 		
-	coordPair p1 = new coordPair(0,0);
-	coordPair p2 = new coordPair(0,1);
-	coordPair p3 = new coordPair(1,1);
-	coordPair p4 = new coordPair(2,1);
-	coordPair p5 = new coordPair(1,2);
-	coordPair p6 = new coordPair(2,2);
+	Cell c1 = new Cell(0,0);
+	c1.setSurfaceType(SurfaceType.BARE_FLOOR);
+	Cell c2 = new Cell(0,1);
+	c2.setSurfaceType(SurfaceType.BARE_FLOOR);
+	Cell c3 = new Cell(1,1);
+	c3.setSurfaceType(SurfaceType.BARE_FLOOR);
+	Cell c4 = new Cell(2,1);
+	c4.setSurfaceType(SurfaceType.BARE_FLOOR);
+	Cell c5 = new Cell(1,2);
+	c5.setSurfaceType(SurfaceType.BARE_FLOOR);
+	Cell c6 = new Cell(2,2);
+	c6.setSurfaceType(SurfaceType.BARE_FLOOR);
 	
 	MapHistory map = new MapHistory();
 	System.out.println("added point (" + Integer.toString(p1.getX()) + "," + Integer.toString(p1.getY()) + ")");

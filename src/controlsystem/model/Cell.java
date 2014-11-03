@@ -36,7 +36,6 @@ public class Cell
 		this.Position = coords;
 	}
 	
-	
 	public Cell getLeftCell() {
 		return AdjacentCells.get(1);
 	}
