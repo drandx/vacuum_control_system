@@ -23,10 +23,17 @@ public class Cell
 	}
 	
 	public Cell( int x, int y ) {
-		this.AdjacentCells = populateAdjacentCells();//new ArrayList<Cell>(4);
+		this.AdjacentCells = populateAdjacentCells();
 		this.DirtUnits = -1;		
 		this.isStation = false;
 		this.Position = new coordPair( x, y );
+	}
+	
+	public Cell( coordPair coords ) {
+		this.AdjacentCells = populateAdjacentCells();
+		this.DirtUnits = -1;		
+		this.isStation = false;
+		this.Position = coords;
 	}
 	
 	
