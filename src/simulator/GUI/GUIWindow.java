@@ -1,7 +1,6 @@
 package simulator.GUI;
 
-import simulator.model.Cell;
-import simulator.model.HomeModel;
+
 
 import java.util.*;
 
@@ -17,27 +16,23 @@ public class GUIWindow extends Frame{
 	JFrame frame;
 	DrawElements drawElements;
 	
-	ArrayList<Cell> floorplanCells = new ArrayList<Cell>();
+	ProcessMovement movement = new ProcessMovement();
 	
-    private int oneX = 0;
-    private int oneY = 925;
-    
-    private int xCoord = 0;
-    private int yCoord = 0;
-    
-    private int xDirection = 1;
-    private int yDirection = 0;
-
-    boolean up = false;
-    boolean down = true;
-    boolean left = false;
-    boolean right = true;
+	int xPos = 0;
+	int yPos = 925;
 	
    public GUIWindow()
    {
-       HomeModel.Load();
 	   createWindow();
-	   getCells();
+	   
+	   while(true)
+	   {
+		   movement.moveVacuum();
+		   xPos = movement.getXValue();
+		   yPos = movement.getYValue();
+		   
+		   frame.repaint();
+	   }
    }
 	
 	public void createWindow()
@@ -53,142 +48,18 @@ public class GUIWindow extends Frame{
 	    frame.setResizable(false);
 	    frame.setSize(1000,1100);
 	    frame.setLocation(0,0);
-	    
+	    frame.setBackground(Color.BLACK);
 	}
 	
-	public void moveVacuum()
-	{	
-		while(true)
-		{
-			if( !(xCoord == 0 && yCoord == 0))
-			{
-				calculateNewPosition();
-			}
-			else
-			{
-			    xCoord += 1;
-			}
-			for(int move = 0; move < 100; move ++)
-			{
-				oneX += xDirection;
-				oneY += yDirection;
-				frame.repaint();
-				try{ Thread.sleep(20);} catch(Exception e){}
-			}
-		}
-
-	}   
-	
-	private void calculateNewPosition()
-	{
-		//Cleaner starts at coords 0,0, which is 1000,1000 in this window
-		
-		
-		Cell currentCell = null;
-		
-		// 1 is open, 2 is obstacle, 4 is stairs
-		for(int find = 0; find < floorplanCells.size(); find++)
-		{
-		    currentCell = floorplanCells.get(find);
-		    
-		    if(currentCell.getXs() == xCoord && currentCell.getYs() == yCoord)
-		    {
-		    	break;
-		    }
-		}
-		
-		String cellSensors = currentCell.getPs();
-		
-		char xPos = cellSensors.charAt(0);
-		char xNeg = cellSensors.charAt(1);
-		char yPos = cellSensors.charAt(2);
-		char yNeg = cellSensors.charAt(3);
-		
-		//***************************************************************** ACCOUNT FOR CORNERS FIRST ****************************************************************
-		
-		// SE CORNER - 1000,1000 - 0,10
-		if(xPos != 1 && yNeg != 1)
-		{
-			if(xDirection == 0) // Approaching corner from the north - head west
-			{
-				yDirection = 0;
-				xDirection = -1;
-				xCoord -= 1;
-			}
-			else // Approaching along wall from the west - head north
-			{
-				yDirection = -1;
-				xDirection = 0;
-				yCoord += 1;
-			}
-		}
-		
-		// NE CORNER - 1000,0 - 10,10
-		else if(xPos != 1 && yPos != 1)
-		{
-			if(xDirection == 0) // Approaching corner from the south - head west
-			{
-				yDirection = 0;
-				xDirection = -1;
-				xCoord -= 1;
-			}
-			else // Approaching along wall from the west - head south
-			{
-				yDirection = 1;
-				xDirection = 0;
-				yCoord -= 1;
-			}
-		}
-		
-		// NW CORNER - 0,0 - 0,10
-		else if(xNeg != 1 && yPos != 1)
-		{
-			if(xDirection == 0) // Approaching corner from the south - head east
-			{
-				yDirection = 0;
-				xDirection = 1;
-				xCoord += 1;
-			}
-			else // Approaching along wall from the east - head south
-			{
-				yDirection = 1;
-				xDirection = 0;
-				yCoord -= 1;
-			}
-		}
-		
-		// SW CORNER - 0,1000, 0,0
-		else if(xNeg != 1 && yNeg != 1)
-		{
-			if(xDirection == 0) // Approaching corner from the north - head east
-			{
-				yDirection = 0;
-				xDirection = 1;
-				xCoord += 1;
-			}
-			else // Approaching along wall from the east, head north
-			{
-				yDirection = -1;
-				xDirection = 0;
-				yCoord = 1;
-			}
-		}
-		
-
-	}
-	
-	private void getCells()
-	{
-		int numFloors = 0;
-		
-		for(int j = 0; j < HomeModel.loadedHome.getFloors().get(numFloors).getCells().size(); j++)
-		{
-		    Cell currentCell = HomeModel.loadedHome.getFloors().get(numFloors).getCells().get(j);
-		    floorplanCells.add(currentCell);
-		}
-	}
 	class DrawElements extends JPanel {
 	    public void paintComponent(Graphics g) {
+	    	
+	    	xPos = movement.getXValue();
+	    	yPos = movement.getYValue();
+	    	
+	    	//Grid Lines - For Debugging
+	    	
+	    	/*
 	    	g.setColor(Color.YELLOW);
 	    	g.drawLine(0, 0, 0,1000);
 	    	g.drawLine(100, 0,100,1000);
@@ -212,9 +83,10 @@ public class GUIWindow extends Frame{
 	    	g.drawLine(0,800,1000,800);
 	    	g.drawLine(0,900,1000,900);
 	    	g.drawLine(0,1000,1000,1000);
+	    	*/
 	    	
-	    	// Test floorplan
-	    	g.setColor(Color.BLACK);
+	    	// Test floorplan - Walls
+	    	g.setColor(Color.WHITE);
 	    	g.drawLine(0,0,0,1000);
 	    	g.drawLine(1000, 1000, 0, 1000);
 	    	g.drawLine(0, 0, 1000, 0);
@@ -230,9 +102,23 @@ public class GUIWindow extends Frame{
 	    	g.drawLine(400, 100, 800, 100);
 	    	g.drawLine(400, 200, 600, 200);
 	    	g.drawLine(600,200,600,100);
+	    	g.drawLine(0, 400, 400, 400);
+	    	g.drawLine(200, 300, 200, 400);
 	    	
-	        g.setColor(Color.BLACK);
-	        g.fillRect(oneX, oneY-25, 100, 100);
+	    	// Test floorplan - Doors
+	    	g.setColor(Color.GREEN);
+	    	g.drawLine(100,500,300,500);
+	    	g.drawLine(400, 600, 400, 700);
+	    	g.drawLine(0, 300, 200, 300);
+	    	g.drawLine(400, 300, 400, 400);
+	    	g.drawLine(400, 200, 400, 300);
+	    	g.drawLine(400, 200, 600, 200);
+	    	g.drawLine(600,200,600,300);
+	    	g.drawLine(600, 100, 800, 100);
+	    	g.drawLine(800,100,800,200);
+	    	
+	        g.setColor(Color.BLUE);
+	        g.fillRect(xPos, yPos - 25, 100, 100);
 	    }
 	}
 }

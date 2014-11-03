@@ -9,8 +9,9 @@ public class Main {
 	public static void main(String[] args) 
 	{	
 		
-		GUIWindow newWindow = new GUIWindow();
+		GUIWindow newWindow = new GUIWindow();		
 		HomeModel.Load();
+		
 		System.out.println("Home Plan Loaded!");
 		System.out.println("Floors Number: "+HomeModel.loadedHome.getFloors().size());
 		for(int i=0; i < HomeModel.loadedHome.getFloors().size(); i++)
@@ -25,10 +26,7 @@ public class Main {
 				System.out.println("ps "+currentCell.getPs());
 				System.out.println("ds "+currentCell.getDs());
 			}
-		}
-		
-		newWindow.moveVacuum();
-		
+		}	
 	}
 
 }
