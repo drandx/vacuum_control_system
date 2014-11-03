@@ -79,7 +79,7 @@ public class PathCalculator {
             coordPair pair = new coordPair();
             pair.setX(pqCell.getPosition().getX());
             pair.setY(pqCell.getPosition().getY());
-            for (Cell c : pqCell.getAdjacentCells()) {
+            for (Cell c : getNeighboringCells( graph, pqCell )) { //right here
             	coordPair adjPair = new coordPair();
             	adjPair.setX(c.getPosition().getX());
             	adjPair.setY(c.getPosition().getY());
@@ -102,31 +102,17 @@ public class PathCalculator {
     // SLIGHTLY BREAKS DIJKSTRA.
     // This has been fixed by the commented line 'FIXED' above.
     // FIXME if there is time, clean this up and enable that functionality.
-    /*private ArrayDeque<coordPair> getNeighboringCells( ArrayDeque<coordPair> knownCells, coordPair cell ){
-    	ArrayDeque<coordPair> neighbors = new ArrayDeque<coordPair>();
+    private ArrayDeque<Cell> getNeighboringCells( ArrayDeque<coordPair> knownCells, Cell cell ){
+    	ArrayDeque<Cell> neighbors = new ArrayDeque<Cell>();
     	
-    	// add X + 1
-    	coordPair temp = new coordPair( cell.getX() + 1, cell.getY() );
-    	if( isCellKnown( knownCells, temp ) )
-    		neighbors.add( temp );
+    	for( Cell adjacent : cell.getAdjacentCells() ) {
+    		
+    		if( isCellKnown( knownCells, adjacent.getPosition() ) )
+    			neighbors.add( adjacent );
+    	}
     	
-    	// add X - 1
-    	temp = new coordPair( cell.getX() - 1, cell.getY() );
-    	if( isCellKnown( knownCells, temp ) )
-    		neighbors.add( temp );
-    	
-    	//add Y + 1
-    	temp = new coordPair( cell.getX(), cell.getY() + 1 );
-    	if( isCellKnown( knownCells, temp ) )
-    		neighbors.add( temp );
-    	
-    	//add Y - 1
-    	temp = new coordPair( cell.getX(), cell.getY() - 1 );
-    	if( isCellKnown( knownCells, temp ) )
-    		neighbors.add( temp );
-    	
-    	return neighbors; //this means you'll probably have to do an empty check in the BFS
-    }*/
+    	return neighbors; //this means you'll probably have to do an empty check in the Dijkstra
+    }
     
     // Checks if a cell is 'known' - has the robot traversed through this cell?
     private boolean isCellKnown( ArrayDeque<coordPair> knownCells, coordPair cell ){
