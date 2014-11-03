@@ -104,12 +104,13 @@ public class PathCalculator {
     // SLIGHTLY BREAKS DIJKSTRA.
     // This has been fixed by the commented line 'FIXED' above.
     // FIXME if there is time, clean this up and enable that functionality.
-    private ArrayDeque<Cell> getNeighboringCells( ArrayDeque<Cell> knownCells, Cell cell ){
+    private ArrayDeque<Cell> getNeighboringCells( ArrayDeque<Cell> knownCells, Cell cell ) {
     	ArrayDeque<Cell> neighbors = new ArrayDeque<Cell>();
     	
     	for( Cell adjacent : cell.getAdjacentCells() ) {
     		
-    		if( isCellKnown( knownCells, adjacent ) )
+    		//if( isCellKnown( knownCells, adjacent ) ) //if getKnownCell != null, add the known cell
+    		if( getKnownCell( knownCells, adjacent ) != null )
     			neighbors.add( adjacent );
     	}
     	
@@ -117,7 +118,8 @@ public class PathCalculator {
     }
     
     // Checks if a cell is 'known' - has the robot traversed through this cell?
-    private boolean isCellKnown( ArrayDeque<Cell> knownCells, Cell cell ){
+    // TODO: May not be needed, anymore
+    private boolean isCellKnown( ArrayDeque<Cell> knownCells, Cell cell ) {
         boolean cellIsKnown = false;
         
         // because we don't care about efficiency, yet.
@@ -134,7 +136,28 @@ public class PathCalculator {
     }
     
     // are two cells equal?
-    private boolean cellsAreEqual( Cell cell1, Cell cell2 ){
+    private boolean cellsAreEqual( Cell cell1, Cell cell2 ) {
     	return ( cell1.getPosition().getX() == cell2.getPosition().getX() ) && ( cell1.getPosition().getY() == cell2.getPosition().getY() );
+    }
+    
+    /**
+     * This gets the known cell data based on an input 'dummy' cell
+     * 
+     * @param knownCells
+     * @param cell
+     * @return
+     */
+    private Cell getKnownCell( ArrayDeque<Cell> knownCells, Cell cell ) {
+    	
+    	Cell foundCell = null;
+    	
+    	for( Cell temp : knownCells ) {
+    		if( cellsAreEqual( cell, temp) ) {
+    			foundCell = temp;
+    			break;
+    		}
+    	}
+    	
+    	return foundCell;
     }
 }
