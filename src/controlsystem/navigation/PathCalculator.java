@@ -110,8 +110,10 @@ public class PathCalculator {
     	for( Cell adjacent : cell.getAdjacentCells() ) {
     		
     		//if( isCellKnown( knownCells, adjacent ) ) //if getKnownCell != null, add the known cell
-    		if( getKnownCell( knownCells, adjacent ) != null )
-    			neighbors.add( adjacent );
+    		Cell temp = getKnownCell( knownCells, adjacent );
+    		
+    		if( temp != null )
+    			neighbors.add( temp );
     	}
     	
     	return neighbors; //this means you'll probably have to do an empty check in the Dijkstra
