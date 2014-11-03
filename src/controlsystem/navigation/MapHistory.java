@@ -32,11 +32,6 @@ public class MapHistory {
         path = new PathCalculator();
         path.getPathHome(historyMap);
         test = path.getDist();
-        //for (Cell c : test.keySet()) {
-        	//System.out.println("Cell " + Integer.toString(c.getPosition().getX()) + " " + Integer.toString(c.getPosition().getY()) + " " + test.get(c));
-        //}
-        System.out.println("last cell = " + Integer.toString(historyMap.peekLast().getPosition().getX()) + " " + Integer.toString(historyMap.peekLast().getPosition().getY()));
-        //distToHome = path.getDist().get(historyMap.peekLast());
         distToHome = test[historyMap.peekLast().getPosition().getX()][historyMap.peekLast().getPosition().getY()];
         
     } 

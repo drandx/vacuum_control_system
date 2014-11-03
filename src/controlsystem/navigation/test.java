@@ -25,31 +25,30 @@ public class test {
 	MapHistory map = new MapHistory();
 	System.out.println("added point (" + Integer.toString(c1.getPosition().getX()) + "," + Integer.toString(c1.getPosition().getY()) + ")");
 	map.addHistory(c1);
-	System.out.println("distance to charging station " + map.getDistToHome());
+	System.out.println("distance to charging station in terms of battery usage " + map.getDistToHome());
 	System.out.println("\n");
 	System.out.println("added point (" + Integer.toString(c2.getPosition().getX()) + "," + Integer.toString(c2.getPosition().getY()) + ")");
 	map.addHistory(c2);
-	System.out.println("distance to charging station " + map.getDistToHome());
+	System.out.println("distance to charging station in terms of battery usage " + map.getDistToHome());
 	System.out.println("\n");
 	System.out.println("added point (" + Integer.toString(c3.getPosition().getX()) + "," + Integer.toString(c3.getPosition().getY()) + ")");
 	map.addHistory(c3);
-	System.out.println("distance to charging station " + map.getDistToHome());
+	System.out.println("distance to charging station in terms of battery usage " + map.getDistToHome());
 	System.out.println("\n");
 	System.out.println("added point (" + Integer.toString(c4.getPosition().getX()) + "," + Integer.toString(c4.getPosition().getY()) + ")");
 	map.addHistory(c4);
-	System.out.println("distance to charging station " + map.getDistToHome());
+	System.out.println("distance to charging station in terms of battery usage " + map.getDistToHome());
 	System.out.println("\n");
 	System.out.println("added point (" + Integer.toString(c5.getPosition().getX()) + "," + Integer.toString(c5.getPosition().getY()) + ")");
 	map.addHistory(c5);
-	System.out.println("distance to charging station " + map.getDistToHome());
+	System.out.println("distance to charging station in terms of battery usage " + map.getDistToHome());
 	System.out.println("\n");
 	System.out.println("added point (" + Integer.toString(c6.getPosition().getX()) + "," + Integer.toString(c6.getPosition().getY()) + ")");
 	map.addHistory(c6);
-	System.out.println("distance to charging station " + map.getDistToHome());
+	System.out.println("distance to charging station in terms of battery usage " + map.getDistToHome());
 	System.out.println("\n");
 	System.out.println("added point (" + Integer.toString(c7.getPosition().getX()) + "," + Integer.toString(c7.getPosition().getY()) + ")");
 	map.addHistory(c7);
-	System.out.println("distance to charging station " + map.getDistToHome());
 	
 	}
 

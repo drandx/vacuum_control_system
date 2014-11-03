@@ -11,10 +11,8 @@ public class PathCalculator {
 	
     private static final int INFINITY = Integer.MAX_VALUE;
     private int[][] dist;
-    //private HashMap<Cell, Integer> dist;
     private HashMap<Cell, Cell> prev;
     private PriorityQueue<Cell> pq;
-    //private HashMap<Cell, Boolean> marked;
     Comparator<Cell> distComparator;
     
     public PathCalculator() {
@@ -39,11 +37,8 @@ public class PathCalculator {
     	
     	Cell root = knownCells.getFirst();
         dist = new int[knownCells.size()][knownCells.size()];
-    	//dist = new HashMap<>();
         prev = new HashMap<>();
         distComparator = new surfaceComparator();
-        //marked = new HashMap<>();
-        //marked = new ArrayList<>();
         
         pq = new PriorityQueue<Cell>(knownCells.size(), distComparator);
     	
@@ -54,28 +49,23 @@ public class PathCalculator {
     private void Dijkstra( ArrayDeque<Cell> graph, Cell source ) {
     	
     	dist[source.getPosition().getX()][source.getPosition().getY()] = 0;
-    	//dist.put(source, 0);
     	
     	ArrayDeque<Cell> searchedCells = new ArrayDeque<Cell>();
     	
     	for(Cell c : graph) {
     		if (c != source) {
     			dist[c.getPosition().getX()][c.getPosition().getY()] = INFINITY;
-    			//dist.put(c, 100);
     			prev.put(c, null);
-    			//marked.put(c, false);
     		}
     		pq.add(c);
     	}
 
         while (!pq.isEmpty()) {
             Cell cell = pq.remove();
-            cell.setMarked(true);
             for (Cell c : getNeighboringCells( graph, cell )) {
-                if ( !c.getMarked() && !isCellKnown( searchedCells, c ) ) {
+                if (!isCellKnown( searchedCells, c ) ) {
                 	searchedCells.add( c );
                 	int newDist = (dist[cell.getPosition().getX()][cell.getPosition().getY()]) + c.getSurfaceType().getCode();
-                	System.out.println("new Dist = " + newDist);
                 	if (newDist < dist[c.getPosition().getX()][c.getPosition().getY()]) {
                 		dist[c.getPosition().getX()][c.getPosition().getY()] = newDist;
                 		prev.put(c, cell);
