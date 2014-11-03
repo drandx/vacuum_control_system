@@ -7,17 +7,17 @@ import controlsystem.model.Cell;
 public class MapHistory {
     
     //private ArrayDeque<coordPair> historyMap;
-    private ArrayDeque<coordPair> historyMap;
+    private ArrayDeque<Cell> historyMap;
     private int distToHome;
     private PathCalculator path;
     
 
     //History Constructor
     public MapHistory() {
-        historyMap = new ArrayDeque<coordPair>();
+        historyMap = new ArrayDeque<Cell>();
     }
     
-    public void addHistory(coordPair history) {
+    public void addHistory(Cell history) {
         historyMap.add(history);
         
         //Closest Distance to charging station is just the total sum of the X and Y coordinates its currently on.
@@ -33,7 +33,7 @@ public class MapHistory {
         
     } 
     
-    public ArrayDeque<coordPair> getHistoryMap(){
+    public ArrayDeque<Cell> getHistoryMap(){
         return historyMap;
     }
     

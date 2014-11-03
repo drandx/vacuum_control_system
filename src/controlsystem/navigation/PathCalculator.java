@@ -32,11 +32,11 @@ public class PathCalculator {
     
     // calculates the shortest path to the charging station, using Dijkstra
     // TODO - this is called when the battery is 'critical'
-    public void getPathHome( ArrayDeque<coordPair> knownCells ){
+    public void getPathHome( ArrayDeque<Cell> knownCells ){
     	
     	//ArrayDeque<coordPair> pathHome = new ArrayDeque<coordPair>();
     	
-    	coordPair root = knownCells.getFirst();
+    	Cell root = knownCells.getFirst();
         dist = new int[knownCells.size()][knownCells.size()];
         prev = new ArrayDeque<Cell>();
         
@@ -47,20 +47,20 @@ public class PathCalculator {
     }
     
     //Dijkstra
-    private ArrayDeque<Cell> Dijkstra( ArrayDeque<coordPair> graph, coordPair source ) {
+    private ArrayDeque<Cell> Dijkstra( ArrayDeque<Cell> graph, Cell source ) {
     	
-    	dist[source.getX()][source.getY()] = 0;
+    	dist[source.getPosition().getX()][source.getPosition().getY()] = 0;
     	Cell cell = new Cell();
 		coordPair p = new coordPair();
-		p.setX(source.getX());
-		p.setY(source.getY());
+		p.setX(source.getPosition().getX());
+		p.setY(source.getPosition().getY());
 		cell.setPosition(p);
     	prev.add(cell);
     	
     	
     	for (int v = 0; v < graph.size(); v++) {
     		for (int z = 0; z < graph.size(); z++) {
-    			if (v != source.getX() && z != source.getY()) {
+    			if (v != source.getPosition().getX() && z != source.getPosition().getY()) {
     				dist[v][z] = INFINITY;
     			}
     		Cell c = new Cell();
@@ -83,7 +83,7 @@ public class PathCalculator {
             	coordPair adjPair = new coordPair();
             	adjPair.setX(c.getPosition().getX());
             	adjPair.setY(c.getPosition().getY());
-                if (!marked[c.getPosition().getX()][c.getPosition().getY()] && isCellKnown(graph, adjPair)) {
+                if (!marked[c.getPosition().getX()][c.getPosition().getY()]) {
                 	newDist = (dist[pair.getX()][pair.getY()]) + c.getSurfaceType().getCode();
                 	if (newDist < dist[c.getPosition().getX()][c.getPosition().getY()]) {
                 		dist[c.getPosition().getX()][c.getPosition().getY()] = newDist;
