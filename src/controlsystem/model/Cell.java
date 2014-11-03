@@ -1,4 +1,5 @@
 package controlsystem.model;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,38 +12,39 @@ public class Cell
 	SurfaceType SurfaceType;
 	Boolean isStation;
 	CellState State;
-	List<Cell> AdjacentCells;	
+	List<Cell> AdjacentCells;
 	
 	
-	public Cell()
-	{
+	public Cell() {
 		this.AdjacentCells = new ArrayList<Cell>(4);
 		this.DirtUnits = -1;		
 		this.isStation = false;
-		this.Position = new coordPair();
+		this.Position = new coordPair( 0, 0 );
+	}
+	
+	public Cell( int x, int y ) {
+		this.AdjacentCells = populateAdjacentCells();//new ArrayList<Cell>(4);
+		this.DirtUnits = -1;		
+		this.isStation = false;
+		this.Position = new coordPair( x, y );
 	}
 	
 	
-	public Cell getLeftCell()
-	{
+	public Cell getLeftCell() {
 		return AdjacentCells.get(1);
 	}
 	
 	
-	public Cell getRightCell()
-	{
+	public Cell getRightCell() {
 		return AdjacentCells.get(0);
 	}
 	
-	public Cell getTopCell()
-	{
+	public Cell getTopCell() {
 		return AdjacentCells.get(2);
 	}
 	
-	public Cell getBottomCell()
-	{
+	public Cell getBottomCell()	{
 		return AdjacentCells.get(3);
-	
 	}
 	
 
@@ -94,6 +96,27 @@ public class Cell
 		AdjacentCells = adjacentCells;
 	}
 	
+	private List<Cell> populateAdjacentCells() {
+		List<Cell> neighbors = new ArrayList<Cell>();
+    	
+    	// add X + 1
+    	Cell temp = new Cell( Position.getX() + 1, Position.getY() );
+    	neighbors.add( temp );
+    	
+    	// add X - 1
+    	temp = new Cell( Position.getX() - 1, Position.getY() );
+    	neighbors.add( temp );
+    	
+    	//add Y + 1
+    	temp = new Cell( Position.getX(), Position.getY() + 1 );
+    	neighbors.add( temp );
+    	
+    	//add Y - 1
+    	temp = new Cell( Position.getX(), Position.getY() - 1 );
+    	neighbors.add( temp );
+		
+    	return neighbors;
+	}
 	
 }
 
