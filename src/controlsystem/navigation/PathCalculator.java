@@ -76,12 +76,16 @@ public class PathCalculator {
             coordPair pair = new coordPair();
             pair.setX(cell.getPosition().getX());
             pair.setY(cell.getPosition().getY());
-            for (Cell c : getNeighboringCells(graph, pair)) { //Fix this calculation to return a queue of cells not coordPairs
-                if (!marked[c.getPosition().getX()][c.getPosition().getY()]) {
+            for (Cell c : cell.getAdjacentCells()) {
+            	coordPair adjPair = new coordPair();
+            	adjPair.setX(c.getPosition().getX());
+            	adjPair.setY(c.getPosition().getY());
+                if (!marked[c.getPosition().getX()][c.getPosition().getY()] && isCellKnown(graph, adjPair)) {
                 	newDist = (dist[pair.getX()][pair.getY()]) + c.getSurfaceType().getCode();
                 	if (newDist < dist[c.getPosition().getX()][c.getPosition().getY()]) {
                 		dist[c.getPosition().getX()][c.getPosition().getY()] = newDist;
                 		prev[c.getPosition().getX()][c.getPosition().getY()] = cell.getPosition(); //should change priority based on comparator
+                		pq.add(c);
                 	}
                 }
             }
@@ -95,7 +99,7 @@ public class PathCalculator {
     // SLIGHTLY BREAKS DIJKSTRA.
     // This has been fixed by the commented line 'FIXED' above.
     // FIXME if there is time, clean this up and enable that functionality.
-    private ArrayDeque<coordPair> getNeighboringCells( ArrayDeque<coordPair> knownCells, coordPair cell ){
+    /*private ArrayDeque<coordPair> getNeighboringCells( ArrayDeque<coordPair> knownCells, coordPair cell ){
     	ArrayDeque<coordPair> neighbors = new ArrayDeque<coordPair>();
     	
     	// add X + 1
@@ -119,7 +123,7 @@ public class PathCalculator {
     		neighbors.add( temp );
     	
     	return neighbors; //this means you'll probably have to do an empty check in the BFS
-    }
+    }*/
     
     // Checks if a cell is 'known' - has the robot traversed through this cell?
     private boolean isCellKnown( ArrayDeque<coordPair> knownCells, coordPair cell ){
