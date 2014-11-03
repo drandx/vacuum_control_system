@@ -1,6 +1,7 @@
 package controlsystem.navigation;
 
 import java.util.ArrayDeque;
+import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Comparator;
 
@@ -10,28 +11,26 @@ public class PathCalculator {
 	
     private static final int INFINITY = Integer.MAX_VALUE;
     private int[][] dist;
-    private ArrayDeque<Cell> prev;
+    //private HashMap<Cell, Integer> dist;
+    private HashMap<Cell, Cell> prev;
     private PriorityQueue<Cell> pq;
-    private boolean[][] marked;
+    //private HashMap<Cell, Boolean> marked;
     Comparator<Cell> distComparator;
     
     public PathCalculator() {
     	
     }
     
-  //Comparator anonymous class implementation
-    /*public static Comparator<Cell> distComparator = new Comparator<Cell>(){
-         
-        @Override
-        public int compare(Cell c1, Cell c2) {
-        	System.out.println("code = " + c1.getSurfaceType().getCode());
-        	System.out.println("code = " + c2.getSurfaceType().getCode());
-            return (c1.getSurfaceType().getCode() - c2.getSurfaceType().getCode());
-        }
-    };*/
-    
-    public ArrayDeque<Cell> getPath() {
+    public HashMap<Cell, Cell> getPath() {
     	return prev;
+    }
+    
+    //public HashMap<Cell, Integer> getDist() {
+    	//return dist;
+    //}
+    
+    public int[][] getDist() {
+    	return dist;
     }
     
     // calculates the shortest path to the charging station, using Dijkstra
@@ -40,63 +39,63 @@ public class PathCalculator {
     	
     	Cell root = knownCells.getFirst();
         dist = new int[knownCells.size()][knownCells.size()];
-        prev = new ArrayDeque<Cell>();
+    	//dist = new HashMap<>();
+        prev = new HashMap<>();
         distComparator = new surfaceComparator();
+        //marked = new HashMap<>();
+        //marked = new ArrayList<>();
         
-        marked = new boolean[knownCells.size()][knownCells.size()];
         pq = new PriorityQueue<Cell>(knownCells.size(), distComparator);
     	
     	Dijkstra(knownCells, root);
     }
     
     //Dijkstra
-    private ArrayDeque<Cell> Dijkstra( ArrayDeque<Cell> graph, Cell source ) {
+    private void Dijkstra( ArrayDeque<Cell> graph, Cell source ) {
     	
     	dist[source.getPosition().getX()][source.getPosition().getY()] = 0;
-    	Cell cell = new Cell();
-		coordPair p = new coordPair();
-		p.setX(source.getPosition().getX());
-		p.setY(source.getPosition().getY());
-		cell.setPosition(p);
-    	prev.add(cell);
+    	//dist.put(source, 0);
     	
-    	
-    	for (int v = 0; v < graph.size(); v++) {
-    		for (int z = 0; z < graph.size(); z++) {
-    			if (v != source.getPosition().getX() && z != source.getPosition().getY()) {
-    				dist[v][z] = INFINITY;
-    			}
-    		Cell c = new Cell();
-    		coordPair pair = new coordPair();
-    		pair.setX(v);
-    		pair.setY(z);
-    		c.setPosition(pair);
+    	for(Cell c : graph) {
+    		if (c != source) {
+    			dist[c.getPosition().getX()][c.getPosition().getY()] = INFINITY;
+    			//dist.put(c, 100);
+    			prev.put(c, null);
+    			//marked.put(c, false);
+    		}
     		pq.add(c);
-    		}		
     	}
 
         while (!pq.isEmpty()) {
-        	int newDist;
-            Cell pqCell = pq.remove();
-            marked[pqCell.getPosition().getX()][pqCell.getPosition().getY()] = true;
-            coordPair pair = new coordPair();
-            pair.setX(pqCell.getPosition().getX());
-            pair.setY(pqCell.getPosition().getY());
-            for (Cell c : getNeighboringCells( graph, pqCell )) { //right here
-            	coordPair adjPair = new coordPair();
-            	adjPair.setX(c.getPosition().getX());
-            	adjPair.setY(c.getPosition().getY());
-                if (!marked[c.getPosition().getX()][c.getPosition().getY()]) {
-                	newDist = (dist[pair.getX()][pair.getY()]) + c.getSurfaceType().getCode();
+            Cell cell = pq.remove();
+            cell.setMarked(true);
+            for (Cell c : getNeighboringCells( graph, cell )) {
+                if (!c.getMarked()) { //KEEP GETTING NULL FOR SOME REASON!!!
+                	int newDist = (dist[cell.getPosition().getX()][cell.getPosition().getY()]) + c.getSurfaceType().getCode();
+                	System.out.println("new Dist = " + newDist);
                 	if (newDist < dist[c.getPosition().getX()][c.getPosition().getY()]) {
                 		dist[c.getPosition().getX()][c.getPosition().getY()] = newDist;
-                		prev.add(cell);
+                		prev.put(c, cell);
                 		pq.add(c);
                 	}
                 }
             }
         }
-    	return prev;
+    	
+    	/*while (!pq.isEmpty()) {
+        Cell cell = pq.remove();
+        marked.put(cell, true);
+        for (Cell c : getNeighboringCells( graph, cell )) {
+            if (marked.equals(null)) {
+            	int newDist = (dist.get(cell)) + c.getSurfaceType().getCode();
+            	if (newDist < dist.get(c)) {
+            		dist.put(c, newDist);
+            		prev.put(c, cell);
+            		pq.add(c);
+            	}
+            }
+        }
+    }*/
     }
     
     // This is essentially the 'getChildrenOfNode' method in Dijkstra

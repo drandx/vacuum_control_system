@@ -11,6 +11,7 @@ public class Cell
 	int DirtUnits;
 	SurfaceType SurfaceType;
 	Boolean isStation;
+	Boolean marked;
 	CellState State;
 	List<coordPair> AdjacentCells;
 	/*
@@ -23,12 +24,14 @@ public class Cell
 		this.AdjacentCells = new ArrayList<coordPair>(4);
 		this.DirtUnits = -1;		
 		this.isStation = false;
+		this.marked = false;
 		this.Position = new coordPair( 0, 0 );
 	}
 	
 	public Cell( int x, int y ) {
 		this.DirtUnits = -1;		
 		this.isStation = false;
+		this.marked = false;
 		this.Position = new coordPair( x, y );
 		this.AdjacentCells = populateAdjacentCells();
 	}
@@ -36,8 +39,17 @@ public class Cell
 	public Cell( coordPair coords ) {
 		this.DirtUnits = -1;		
 		this.isStation = false;
+		this.marked = false;
 		this.Position = coords;
 		this.AdjacentCells = populateAdjacentCells();
+	}
+	
+	public Boolean getMarked() {
+		return this.marked;
+	}
+	
+	public void setMarked(Boolean b) {
+		this.marked = b;
 	}
 	
 	public Cell getRightCell() {
