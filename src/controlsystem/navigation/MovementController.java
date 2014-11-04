@@ -56,7 +56,7 @@ public class MovementController {
 				if(PowerController.ValidateChargeToMove(pathToStation, fullCell))
 				{
 					//TODO-Log the movement - from what cell to what cell
-					
+					//TODO - and probably how much power is remaining or something...
 					Util.botLog( "Bot is moving from (" + currentLocation.getPosition().getX() + ","
 							+ currentLocation.getPosition().getY() + ") - to (" + 
 							fullCell.getPosition().getX() + "," + fullCell.getPosition().getY() + ")." );
