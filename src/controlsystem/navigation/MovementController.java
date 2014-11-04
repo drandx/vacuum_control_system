@@ -2,6 +2,7 @@ package controlsystem.navigation;
 
 import java.util.LinkedList;
 
+import simulator.util.Util;
 import controlsystem.model.Cell;
 import controlsystem.model.CellState;
 import controlsystem.model.SurfaceType;
@@ -55,6 +56,13 @@ public class MovementController {
 				if(PowerController.ValidateChargeToMove(pathToStation, fullCell))
 				{
 					//TODO-Log the movement - from what cell to what cell
+					
+					Util.botLog( "Bot is moving from (" + currentLocation.getPosition().getX() + ","
+							+ currentLocation.getPosition().getY() + ") - to (" + 
+							fullCell.getPosition().getX() + "," + fullCell.getPosition().getY() + ")." );
+					
+					System.out.println( "logTest" );
+					
 					PowerController.ReduceCharge(this.currentLocation, fullCell);
 					//Changes the current location. "this.sensor.getCell(adjCell.getPosition())" gets the adjacent cells
 					this.currentLocation = fullCell;
@@ -68,6 +76,4 @@ public class MovementController {
 		
 		return moved;
 	}
-	
-	
 }
