@@ -10,8 +10,9 @@ import controlsystem.model.Cell;
 public class PathCalculator {
 	
     private static final int INFINITY = Integer.MAX_VALUE;
-    private int[][] dist;
+    private HashMap<Cell, Integer> dist;
     private HashMap<Cell, Cell> prev;
+    //private Cell[][] prev;
     private PriorityQueue<Cell> pq;
     Comparator<Cell> distComparator;
     
@@ -23,11 +24,11 @@ public class PathCalculator {
     	return prev;
     }
     
-    //public HashMap<Cell, Integer> getDist() {
-    	//return dist;
-    //}
+    /*public Cell[][] getPath() {
+    	return prev;
+    }*/
     
-    public int[][] getDist() {
+    public HashMap<Cell, Integer> getDist() {
     	return dist;
     }
     
@@ -36,8 +37,9 @@ public class PathCalculator {
     public void getPathHome( ArrayDeque<Cell> knownCells ){
     	
     	Cell root = knownCells.getFirst();
-        dist = new int[knownCells.size()][knownCells.size()];
+    	dist = new HashMap<>();
         prev = new HashMap<>();
+    	//prev = new Cell[knownCells.size()][knownCells.size()];
         distComparator = new surfaceComparator();
         
         pq = new PriorityQueue<Cell>(knownCells.size(), distComparator);
@@ -48,19 +50,19 @@ public class PathCalculator {
     //Dijkstra
     private void Dijkstra( ArrayDeque<Cell> graph, Cell source ) {
     	
-    	dist[source.getPosition().getX()][source.getPosition().getY()] = 0;
-    	
+    	dist.put(source, 0);
     	ArrayDeque<Cell> searchedCells = new ArrayDeque<Cell>();
     	
     	for(Cell c : graph) {
-    		if (c != source) {
-    			dist[c.getPosition().getX()][c.getPosition().getY()] = INFINITY;
+    		if (c != source) {;
+    			dist.put(c, INFINITY);
     			prev.put(c, null);
+    			//prev[c.getPosition().getX()][c.getPosition().getY()] = null;
     		}
     		pq.add(c);
     	}
 
-        while (!pq.isEmpty()) {
+        /*while (!pq.isEmpty()) {
             Cell cell = pq.remove();
             for (Cell c : getNeighboringCells( graph, cell )) {
                 if (!isCellKnown( searchedCells, c ) ) {
@@ -73,22 +75,23 @@ public class PathCalculator {
                 	}
                 }
             }
-        }
+        }*/
     	
-    	/*while (!pq.isEmpty()) {
-        Cell cell = pq.remove();
-        marked.put(cell, true);
-        for (Cell c : getNeighboringCells( graph, cell )) {
-            if (marked.equals(null)) {
-            	int newDist = (dist.get(cell)) + c.getSurfaceType().getCode();
-            	if (newDist < dist.get(c)) {
-            		dist.put(c, newDist);
-            		prev.put(c, cell);
-            		pq.add(c);
-            	}
-            }
-        }
-    }*/
+    	while (!pq.isEmpty()) {
+    		Cell cell = pq.remove();
+	        for (Cell c : getNeighboringCells( graph, cell )) {
+	            if (!isCellKnown( searchedCells, c ) ) {
+	                searchedCells.add( c );
+	            	int newDist = (dist.get(cell)) + c.getSurfaceType().getCode();
+	            	if (newDist < dist.get(c)) {
+	            		dist.put(c, newDist);
+	            		prev.put(c, cell);
+	            		//prev[c.getPosition().getX()][c.getPosition().getY()] = cell;
+	            		pq.add(c);
+	            	}
+	            }
+	        }
+    }
     }
     
     // This is essentially the 'getChildrenOfNode' method in Dijkstra

@@ -21,6 +21,8 @@ public class test {
 	c6.setSurfaceType(SurfaceType.BARE_FLOOR);
 	Cell c7 = new Cell(2,2);
 	c7.setSurfaceType(SurfaceType.BARE_FLOOR);
+	Cell c8 = new Cell(2,3);
+	c8.setSurfaceType(SurfaceType.LOW_PILE_FLOOR);
 	
 	MapHistory map = new MapHistory();
 	System.out.println("added point (" + Integer.toString(c1.getPosition().getX()) + "," + Integer.toString(c1.getPosition().getY()) + ")");
@@ -49,7 +51,24 @@ public class test {
 	System.out.println("\n");
 	System.out.println("added point (" + Integer.toString(c7.getPosition().getX()) + "," + Integer.toString(c7.getPosition().getY()) + ")");
 	map.addHistory(c7);
+	System.out.println("distance to charging station in terms of battery usage " + map.getDistToHome());
+	System.out.println("\n");
+	System.out.println("added point (" + Integer.toString(c8.getPosition().getX()) + "," + Integer.toString(c8.getPosition().getY()) + ")");
+	map.addHistory(c8);
+	System.out.println("distance to charging station in terms of battery usage " + map.getDistToHome());
+	System.out.println("\n");
 	
+	System.out.println("Path to get back to station is \n");
+	/*Cell cell = map.getLastCell();
+	while(cell != c1) {
+		cell = map.getPathToHome().get(cell);
+		System.out.println(cell.getPosition().getX() + " " + cell.getPosition().getY());
+	}*/
+	
+	for(Cell c : map.getPathToHome().keySet()) {
+		Cell cell = map.getPathToHome().get(c);
+				System.out.println(c.getPosition().getX() + "," + c.getPosition().getY() +  " = " + cell.getPosition().getX() + "," + cell.getPosition().getY());
+	}
 	}
 
 

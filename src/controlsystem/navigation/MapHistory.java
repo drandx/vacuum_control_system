@@ -6,11 +6,11 @@ import java.util.HashMap;
 import controlsystem.model.Cell;
 
 public class MapHistory {
-    
-    //private ArrayDeque<coordPair> historyMap;
+	
     private ArrayDeque<Cell> historyMap;
     private int distToHome;
-    private int[][] test;
+    private HashMap<Cell,Integer> minDist;
+    private HashMap<Cell,Cell> pathHome;
     private PathCalculator path;
     
 
@@ -22,19 +22,20 @@ public class MapHistory {
     public void addHistory(Cell history) {
         historyMap.add(history);
         
-        //Closest Distance to charging station is just the total sum of the X and Y coordinates its currently on.
-        //This will be the min battery it needs to get to charging station
-        
-        //I think this distToHome should be calculated using BFS every time we add a history?
-        //distToHome should just be the size of the shortest path array that we obtain from doing BFS
-        //distToHome = Math.abs(history.getX()) + Math.abs(history.getY());
+        //DistToHome is calculated using Dijkstra every time we add a history, this is the min amt of battery life
+        //needed to get home
         
         path = new PathCalculator();
         path.getPathHome(historyMap);
-        test = path.getDist();
-        distToHome = test[historyMap.peekLast().getPosition().getX()][historyMap.peekLast().getPosition().getY()];
+        minDist = path.getDist();
+        pathHome = path.getPath();
+        distToHome = minDist.get(historyMap.peekLast());
         
     } 
+    
+    public Cell getLastCell() {
+    	return historyMap.peekLast();
+    }
     
     public ArrayDeque<Cell> getHistoryMap(){
         return historyMap;
@@ -42,5 +43,9 @@ public class MapHistory {
     
     public int getDistToHome() {
         return distToHome;
+    }
+    
+    public HashMap<Cell,Cell> getPathToHome() {
+    	return pathHome;
     }
 }
