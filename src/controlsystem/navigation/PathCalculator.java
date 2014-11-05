@@ -40,7 +40,7 @@ public class PathCalculator {
     	dist = new HashMap<>();
         prev = new HashMap<>();
     	//prev = new Cell[knownCells.size()][knownCells.size()];
-        distComparator = new surfaceComparator();
+        distComparator = new distComp();
         
         pq = new PriorityQueue<Cell>(knownCells.size(), distComparator);
     	
@@ -91,7 +91,26 @@ public class PathCalculator {
 	            	}
 	            }
 	        }
+    	}
     }
+    
+    public class distComp implements Comparator<Cell> {
+
+    	//@Override
+    	/*public int compare(Cell c1, Cell c2) {
+            return (c1.getSurfaceType().getCode() - c2.getSurfaceType().getCode());
+    	}*/
+    	
+    	@Override
+    	public int compare(Cell c1, Cell c2) {
+            if((dist.get(c1) - dist.get(c2)) < 0)
+            	return -1;
+            else if((dist.get(c1) - dist.get(c2)) > 0)
+            	return 1;
+            else
+            	return 0;
+    	}
+
     }
     
     // This is essentially the 'getChildrenOfNode' method in Dijkstra
