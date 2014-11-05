@@ -12,15 +12,10 @@ public class Cell
 	SurfaceType SurfaceType;
 	Boolean isStation;
 	CellState State;
-	List<coordPair> AdjacentCells;
-	/*
-	 * Due to issues with infinite loops, the list of AdjacentCells are, in fact, coordPairs.
-	 * The retrieval methods, however, will spit out Cell objects.
-	 */
-	
+	List<Cell> AdjacentCells;
 	
 	public Cell() {
-		this.AdjacentCells = new ArrayList<coordPair>(4);
+		this.AdjacentCells = new ArrayList<Cell>(4);
 		this.DirtUnits = -1;		
 		this.isStation = false;
 		this.Position = new coordPair( 0, 0 );
@@ -30,30 +25,30 @@ public class Cell
 		this.DirtUnits = -1;		
 		this.isStation = false;
 		this.Position = new coordPair( x, y );
-		this.AdjacentCells = populateAdjacentCells();
+		this.AdjacentCells = new ArrayList<Cell>(4);
 	}
 	
 	public Cell( coordPair coords ) {
 		this.DirtUnits = -1;		
 		this.isStation = false;
 		this.Position = coords;
-		this.AdjacentCells = populateAdjacentCells();
+		this.AdjacentCells = new ArrayList<Cell>(4);
 	}
 	
 	public Cell getRightCell() {
-		return new Cell( AdjacentCells.get(0) );
+		return AdjacentCells.get(0);
 	}
 	
 	public Cell getLeftCell() {
-		return new Cell( AdjacentCells.get(1) );
+		return AdjacentCells.get(1);
 	}
 	
 	public Cell getTopCell() {
-		return new Cell( AdjacentCells.get(2) );
+		return AdjacentCells.get(2);
 	}
 	
 	public Cell getBottomCell()	{
-		return new Cell( AdjacentCells.get(3) );
+		return AdjacentCells.get(3);
 	}
 	
 	public coordPair getPosition() {
@@ -97,45 +92,31 @@ public class Cell
 	}
 
 	public List<Cell> getAdjacentCells() {
-		
-		ArrayList<Cell> cells = new ArrayList<Cell>();
-		
-		for( coordPair coord : AdjacentCells ){
-			
-			cells.add( new Cell( coord ) );
-		}
-		
-		return cells;
+		return AdjacentCells;
 	}
 
 	public void setAdjacentCells(List<Cell> newAdjacentCells) {
-		//AdjacentCells = newAdjacentCells;
-		
-		AdjacentCells.clear();
-		
-		for( Cell cell : newAdjacentCells ) {
-			AdjacentCells.add( cell.getPosition() );
-		}
+		AdjacentCells = newAdjacentCells;
 	}
 	
-	private List<coordPair> populateAdjacentCells() {
-		List<coordPair> neighbors = new ArrayList<coordPair>();
+	public List<Cell> getDummyAdjacentCells() {
+		List<Cell> neighbors = new ArrayList<Cell>();
     	
     	// add X + 1
 		coordPair temp = new coordPair( Position.getX() + 1, Position.getY() );
-    	neighbors.add( temp );
+    	neighbors.add( new Cell(temp) );
     	
     	// add X - 1
     	temp = new coordPair( Position.getX() - 1, Position.getY() );
-    	neighbors.add( temp );
+    	neighbors.add( new Cell(temp) );
     	
     	//add Y + 1
     	temp = new coordPair( Position.getX(), Position.getY() + 1 );
-    	neighbors.add( temp );
+    	neighbors.add( new Cell(temp) );
     	
     	//add Y - 1
     	temp = new coordPair( Position.getX(), Position.getY() - 1 );
-    	neighbors.add( temp );
+    	neighbors.add( new Cell(temp) );
 		
     	return neighbors;
 	}

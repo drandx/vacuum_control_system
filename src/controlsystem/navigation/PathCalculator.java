@@ -122,7 +122,7 @@ public class PathCalculator {
     private ArrayDeque<Cell> getNeighboringCells( ArrayDeque<Cell> knownCells, Cell cell ) {
     	ArrayDeque<Cell> neighbors = new ArrayDeque<Cell>();
     	
-    	for( Cell adjacent : cell.getAdjacentCells() ) {
+    	for( Cell adjacent : cell.getDummyAdjacentCells() ) {//cell.getAdjacentCells() ) {
     		
     		//if( isCellKnown( knownCells, adjacent ) ) //if getKnownCell != null, add the known cell
     		Cell temp = getKnownCell( knownCells, adjacent );
