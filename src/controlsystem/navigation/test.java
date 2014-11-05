@@ -59,11 +59,6 @@ public class test {
 	System.out.println("\n");
 	
 	System.out.println("Path to get back to station is \n");
-	/*Cell cell = map.getLastCell();
-	while(cell != c1) {
-		cell = map.getPathToHome().get(cell);
-		System.out.println(cell.getPosition().getX() + " " + cell.getPosition().getY());
-	}*/
 	
 	for(Cell c : map.getPathToHome().keySet()) {
 		Cell cell = map.getPathToHome().get(c);
