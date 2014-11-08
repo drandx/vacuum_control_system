@@ -10,7 +10,7 @@ public class PowerController {
 	public static void ReduceCharge(Cell initPosition, Cell finalPosition)
 	{
 		CurrentCharge = CurrentCharge - ((initPosition.getSurfaceType().getCode() + finalPosition.getSurfaceType().getCode())/2);
-		System.out.println("Current Carhge: "+CurrentCharge);
+		System.out.println("Current Charge: "+CurrentCharge);
 	}
 	
 	

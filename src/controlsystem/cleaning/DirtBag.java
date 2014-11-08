@@ -10,7 +10,7 @@ private static float CurrentBag = 0;
 		System.out.println("Current Bag Load: "+ CurrentBag);
 	}
 	
-	public static float getCurrentDirt() {
+	public static float getCurrentBag() {
 		return CurrentBag;
 	}
 

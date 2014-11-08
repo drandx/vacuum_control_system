@@ -1,0 +1,5 @@
+
+Sat Nov 08 14:17:58 CST 2014 -  MyWebServer.java 
+Bot is moving from (0,0) - to (1,0).
+Sat Nov 08 14:19:16 CST 2014 -  MyWebServer.java 
+Bot is moving from (0,0) - to (1,0).

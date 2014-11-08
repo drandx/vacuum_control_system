@@ -19,12 +19,24 @@ public class PathCalculator {
     	
     }
     
-    public HashMap<Cell, Cell> getPath() {
+    //This gets the HashMap of all the cells and their corresponding next cell back
+    public HashMap<Cell, Cell> getPathMap() {
     	return prev;
     }
     
-    public HashMap<Cell, Integer> getDist() {
+    //This gets the HashMap of all the cells and their corresponding distance to charging station
+    public HashMap<Cell, Integer> getDistMap() {
     	return dist;
+    }
+    
+    //This will return the cell that the robot would go to next to get back to station based on current cell
+    public Cell getNextCellBack(Cell current) {
+    	return prev.get(current);
+    }
+    
+    //This will return the distance (in battery power) that it will take to get robot back to sation based on current cell
+    public int getMinDist(Cell current) {
+    	return dist.get(current);
     }
     
     // calculates the shortest path to the charging station, using Dijkstra
@@ -54,23 +66,6 @@ public class PathCalculator {
     		}
     		pq.add(c);
     	}
-    	
-    	/*while (!pq.isEmpty()) {
-    		Cell cell = pq.poll();
-    		System.out.println("removed cell is: " + cell.getPosition().getX() +"," + cell.getPosition().getY());
-	        for (Cell c : getNeighboringCells( graph, cell )) {
-	        	//System.out.println("its neighbors are: " + c.getPosition().getX() +"," + c.getPosition().getY());
-	            if (!isCellKnown( searchedCells, c ) ) {
-	                searchedCells.add( c );
-	            	int newDist = (dist.get(cell)) + c.getSurfaceType().getCode();
-	            	if (newDist < dist.get(c)) {
-	            		dist.put(c, newDist);
-	            		prev.put(c, cell);
-	            		pq.add(c);
-	            	}
-	            }
-	        }
-    	}*/
     	
     	while (!pq.isEmpty()) {
     		Cell cell = pq.poll();
@@ -119,7 +114,7 @@ public class PathCalculator {
     
     // Checks if a cell is 'known' - has the robot traversed through this cell?
     //TODO remove this i dont think we will need it
-    private boolean isCellKnown( ArrayDeque<Cell> knownCells, Cell cell ) {
+    /*private boolean isCellKnown( ArrayDeque<Cell> knownCells, Cell cell ) {
         boolean cellIsKnown = false;
         
         // because we don't care about efficiency, yet.
@@ -133,7 +128,7 @@ public class PathCalculator {
             }
         }
         return cellIsKnown;
-    }
+    }*/
     
     // are two cells equal?
     private boolean cellsAreEqual( Cell cell1, Cell cell2 ) {

@@ -27,8 +27,8 @@ public class MapHistory {
         
         path = new PathCalculator();
         path.getPathHome(historyMap);
-        minDist = path.getDist();
-        pathHome = path.getPath();
+        minDist = path.getDistMap();
+        pathHome = path.getPathMap();
         distToHome = minDist.get(historyMap.peekLast());
         
     } 
