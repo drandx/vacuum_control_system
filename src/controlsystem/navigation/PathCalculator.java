@@ -34,7 +34,7 @@ public class PathCalculator {
     	return prev.get(current);
     }
     
-    //This will return the distance (in battery power) that it will take to get robot back to sation based on current cell
+    //This will return the distance (in battery power) that it will take to get robot back to station based on current cell
     public int getMinDist(Cell current) {
     	return dist.get(current);
     }
@@ -112,29 +112,6 @@ public class PathCalculator {
     	return neighbors; //this means you'll probably have to do an empty check in the Dijkstra
     }
     
-    // Checks if a cell is 'known' - has the robot traversed through this cell?
-    //TODO remove this i dont think we will need it
-    /*private boolean isCellKnown( ArrayDeque<Cell> knownCells, Cell cell ) {
-        boolean cellIsKnown = false;
-        
-        // because we don't care about efficiency, yet.
-        for( Cell coord : knownCells ){
-            if( cellsAreEqual( cell, coord ) ){
-                cellIsKnown = true;
-                //System.out.println( "Compare: " );
-                //System.out.println( "Cell: " + cell.getX() + "," + cell.getY() );
-                //System.out.println( "OtherCell: " + coord.getX() + "," + coord.getY() );
-                break;
-            }
-        }
-        return cellIsKnown;
-    }*/
-    
-    // are two cells equal?
-    private boolean cellsAreEqual( Cell cell1, Cell cell2 ) {
-    	return ( cell1.getPosition().getX() == cell2.getPosition().getX() ) && ( cell1.getPosition().getY() == cell2.getPosition().getY() );
-    }
-    
     /**
      * This gets the known cell data based on an input 'dummy' cell
      * 
@@ -147,7 +124,8 @@ public class PathCalculator {
     	Cell foundCell = null;
     	
     	for( Cell temp : knownCells ) {
-    		if( cellsAreEqual( cell, temp) ) {
+    		//if( cellsAreEqual( cell, temp) ) {
+    		if( cell.equals( temp ) ) {
     			foundCell = temp;
     			break;
     		}

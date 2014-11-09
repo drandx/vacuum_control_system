@@ -120,5 +120,9 @@ public class Cell
     	return neighbors;
 	}
 	
+	public boolean equals( Cell compare ) {
+		return ( this.getPosition().getX() == compare.getPosition().getX() ) && ( this.getPosition().getY() == compare.getPosition().getY() );
+	}
+	
 }
 
