@@ -57,11 +57,12 @@ public class MovementController {
 				{
 					//TODO-Log the movement - from what cell to what cell
 					//TODO - and probably how much power is remaining or something...
-					Util.botLog( "Bot is moving from (" + currentLocation.getPosition().getX() + ","
+					String logString = "Bot is moving from (" + currentLocation.getPosition().getX() + ","
 							+ currentLocation.getPosition().getY() + ") - to (" + 
-							fullCell.getPosition().getX() + "," + fullCell.getPosition().getY() + ")." );
+							fullCell.getPosition().getX() + "," + fullCell.getPosition().getY() + ").";
+					Util.botLog(logString);
 					
-					System.out.println( "logTest" );
+					System.out.println( logString );
 					
 					PowerController.ReduceCharge(this.currentLocation, fullCell);
 					//Changes the current location. "this.sensor.getCell(adjCell.getPosition())" gets the adjacent cells

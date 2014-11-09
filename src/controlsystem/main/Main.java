@@ -4,9 +4,10 @@ public class Main {
 
 	public static void main(String[] args) {
 		MovementController movementController = new MovementController();
-		movementController.MoveToNextPosition();
-		System.out.println("--Moved");
-
+		while (movementController.MoveToNextPosition())
+		{
+			System.out.println("Moved");
+		}
 	}
 
 }
