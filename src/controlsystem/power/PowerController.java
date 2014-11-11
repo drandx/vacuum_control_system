@@ -1,11 +1,9 @@
 package controlsystem.power;
-
-import java.util.LinkedList;
-
 import controlsystem.model.Cell;
+import controlsystem.model.Constants;
 
 public class PowerController {
-	private static float CurrentCharge = 50;
+	private static float CurrentCharge = Constants.BATTERY_CAPACITY;
 	
 	public static void ReduceCharge(Cell initPosition, Cell finalPosition)
 	{
@@ -21,20 +19,20 @@ public class PowerController {
 	 * @param finalPoint
 	 * @return
 	 */
-	public static boolean ValidateChargeToMove(LinkedList<Cell>pathToStation, Cell finalPoint)
+	public static boolean ValidateChargeToMove(float distanceToHome,Cell currentCell, Cell nextCell)
 	{		
-		float pathAverage = 0;
-		int i = 1;
-		for (i = 0; i < pathToStation.size(); i++) 
-		{
-			pathAverage = pathAverage + pathToStation.get(i).getSurfaceType().getCode();
-		}
-		pathAverage = (pathAverage + finalPoint.getSurfaceType().getCode()) / (pathToStation.size() + 1);
-		
-		if(pathAverage <= CurrentCharge)
+		float distanceToNext = (currentCell.getSurfaceType().getCode() + nextCell.getSurfaceType().getCode())/2;
+		if(((distanceToNext + distanceToHome)/2) <= CurrentCharge )
 			return true;
 		else
+		{
 			return false;
+		}
+	}
+	
+	public static float GetCurrentCharge()
+	{
+		return CurrentCharge;
 	}
 	
 

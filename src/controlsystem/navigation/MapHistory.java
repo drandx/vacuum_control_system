@@ -48,4 +48,14 @@ public class MapHistory {
     public HashMap<Cell,Cell> getPathToHome() {
     	return pathHome;
     }
+    
+    public Boolean containsCell(Cell cell)
+    {
+    	for(Cell cellItem : this.historyMap)
+    	{
+    		if((cellItem.getPosition().getX() == cell.getPosition().getX()) && (cellItem.getPosition().getY() == cell.getPosition().getY()))    		
+    			return true;
+    	}
+    	return false;
+    }
 }

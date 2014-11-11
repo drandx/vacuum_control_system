@@ -3,8 +3,8 @@ import controlsystem.navigation.*;
 public class Main {
 
 	public static void main(String[] args) {
-		MovementController movementController = new MovementController();
-		while (movementController.MoveToNextPosition())
+		RobotController robotController = new RobotController();
+		while (robotController.Run())
 		{
 			System.out.println("Moved");
 		}

@@ -64,6 +64,7 @@ public class Util {
 	 */
 	public static void botLog(String log){
 		try {
+			System.out.println("Logging: "+log);
 			Calendar cal = Calendar.getInstance();
 			java.util.Date currentTime = cal.getTime();
 
