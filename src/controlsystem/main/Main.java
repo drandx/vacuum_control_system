@@ -4,9 +4,9 @@ public class Main {
 
 	public static void main(String[] args) {
 		RobotController robotController = new RobotController();
-		while (robotController.Run())
+		while (true)
 		{
-			System.out.println("Moved");
+			robotController.Run();
 		}
 	}
 

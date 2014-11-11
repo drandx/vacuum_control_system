@@ -11,10 +11,18 @@ public class RobotController {
 	 SensorController sensor;
 	 MapHistory mapHistory;
 	 
+	 
+	public void RobotToHome()
+	{
+		this.currentLocation = sensor.getCellDetail(new coordPair(0, 0));
+		PowerController.ChargeBattery();
+		//TODO: Reset Dirt Bag		
+	}
+	 
 	public RobotController() {
 		this.sensor = new SensorController();
 		this.mapHistory = new MapHistory();
-		this.currentLocation = sensor.getCellDetail(new coordPair(0, 0));
+		this.RobotToHome();
 		this.mapHistory.addHistory(this.currentLocation);
 	}
 
@@ -38,19 +46,14 @@ public class RobotController {
 			if(((adjCell.getState() == CellState.OPEN) || (adjCell.getState() == CellState.UNKNOWN)) && (!this.mapHistory.containsCell(adjCell)))
 			{
 				Cell nextCell = this.sensor.getCellDetail(adjCell.getPosition());
-				// TODO: May have to do things with PowerController to use our PathCalculator and determine if it can move or head home...?
-				// And then, that's where a flag is raised to say, 'hey, cleaning was interrupted and should be resumed'
-				// a similar thing should be added to the 'dirt bag' controller thing
-				System.out.println("Distance to go home: "+this.mapHistory.getDistToHome());
-				System.out.println("Charge before movement: "+PowerController.GetCurrentCharge());
+				Util.botLog("Distance to go home: "+this.mapHistory.getDistToHome());
+				Util.botLog("Charge before movement: "+PowerController.GetCurrentCharge());
 				if(PowerController.ValidateChargeToMove(this.mapHistory.getDistToHome(),this.currentLocation, nextCell))
 				{
-					//TODO - and probably how much power is remaining or something...
 					String logString = "Bot is moving from (" + currentLocation.getPosition().getX() + "," + currentLocation.getPosition().getY() + ") - to (" + nextCell.getPosition().getX() + "," + nextCell.getPosition().getY() + ").";
-					Util.botLog(logString);
+					Util.botLog(logString);					
 					
-					PowerController.ReduceCharge(this.currentLocation, nextCell);
-					//Changes the current location. "this.sensor.getCell(adjCell.getPosition())" gets the adjacent cells
+					PowerController.ReduceCharge(this.currentLocation, nextCell);					
 					this.currentLocation = nextCell;
 					this.mapHistory.addHistory(nextCell);
 					moved = true;
@@ -59,6 +62,10 @@ public class RobotController {
 				else
 				{
 					Util.botLog("Robot needs to go home");
+					System.out.println("Last visited cell: "+this.mapHistory.getLastCell().toString());
+					this.RobotToHome();
+					Util.botLog("Resuming from home to "+this.mapHistory.getLastCell().toString());
+					this.currentLocation = this.mapHistory.getLastCell();
 				}
 				
 			}

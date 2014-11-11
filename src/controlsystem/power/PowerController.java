@@ -11,7 +11,6 @@ public class PowerController {
 		System.out.println("Current Charge: "+CurrentCharge);
 	}
 	
-	
 	/**
 	 * Validates if there is enough power to move to a next position counting the 
 	 * power needed to go back to the station.
@@ -35,5 +34,9 @@ public class PowerController {
 		return CurrentCharge;
 	}
 	
+	public static void ChargeBattery()
+	{
+		CurrentCharge = Constants.BATTERY_CAPACITY;		
+	}	
 
 }

@@ -124,5 +124,10 @@ public class Cell
 		return ( this.getPosition().getX() == compare.getPosition().getX() ) && ( this.getPosition().getY() == compare.getPosition().getY() );
 	}
 	
+	 @Override
+	 public String toString() {
+		 return ""+this.getPosition().getX()+","+this.getPosition().getY();	 
+	 }
+	
 }
 
