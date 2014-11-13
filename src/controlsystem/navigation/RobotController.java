@@ -1,5 +1,8 @@
 package controlsystem.navigation;
 
+import java.util.Collection;
+import java.util.HashMap;
+
 import simulator.util.Util;
 import controlsystem.model.Cell;
 import controlsystem.model.CellState;
@@ -35,6 +38,60 @@ public class RobotController {
 	}
 	
 	/**
+	 * TODO: I'm realizing that this is probably useless now that I've made goHome() autonomous.
+	 * 
+	 * Takes any collection denoting a path and sends the robot to travel down it.
+	 * TODO: This is mostly for pathing home, so it assumes you already know it has enough
+	 * overall charge to make it to its destination.
+	 * (It does NOT check if it has enough charge to move)
+	 * (it does NOT clean on this path)
+	 * (It also assumes that the path is valid and doesn't involve punching through walls)
+	 * 
+	 * @param path	- the robot will travel from the first element to the last.
+	 */
+	public void followGivenPath( Collection<Cell> path ) {
+		
+		for( Cell coord : path ) {
+			
+			PowerController.ReduceCharge( currentLocation, coord);
+			logMovement( currentLocation, coord );
+			setCurrentLocation( coord );
+		}
+	}
+	
+	/**
+	 * Sends the robot home.  Assumes the mapHistory has been kept up-to-date and such!
+	 */
+	private void goHome(){
+		
+		Util.botLog( "\nRobot is heading home!");
+		
+		HashMap<Cell, Cell> pathHome = mapHistory.getPathToHome();
+		
+		Cell homeStation = new Cell( 0, 0 );  //TODO: Shouldn't this be a member variable?
+		
+		while( !currentLocation.equals( homeStation ) ){
+			Cell nextCell = pathHome.get( currentLocation );
+			
+			PowerController.ReduceCharge( currentLocation, nextCell );
+			logMovement( currentLocation, nextCell );
+			setCurrentLocation( nextCell );
+		}
+	}
+	
+	/**
+	 * Logs the movement of the robot
+	 * @param currentCell
+	 * @param nextCell
+	 */
+	private void logMovement( Cell currentCell, Cell nextCell ){
+		
+		String logString = "\nBot is moving from (" + currentCell.getPosition().getX() + "," + currentCell.getPosition().getY() + ") - to (" + nextCell.getPosition().getX() + "," + nextCell.getPosition().getY() + ").";
+		Util.botLog(logString);		
+		
+	}
+	
+	/**
 	 * Returns false if there is not enough battery or there are no available cells to move to.
 	 * @return
 	 */
@@ -50,8 +107,7 @@ public class RobotController {
 				Util.botLog("Charge before movement: "+PowerController.GetCurrentCharge());
 				if(PowerController.ValidateChargeToMove(this.mapHistory.getDistToHome(),this.currentLocation, nextCell))
 				{
-					String logString = "Bot is moving from (" + currentLocation.getPosition().getX() + "," + currentLocation.getPosition().getY() + ") - to (" + nextCell.getPosition().getX() + "," + nextCell.getPosition().getY() + ").";
-					Util.botLog(logString);					
+					logMovement( currentLocation, nextCell );			
 					
 					PowerController.ReduceCharge(this.currentLocation, nextCell);					
 					this.currentLocation = nextCell;
