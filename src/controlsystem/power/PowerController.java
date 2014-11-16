@@ -21,11 +21,11 @@ public class PowerController {
 	public static boolean ValidateChargeToMove(float distanceToHome,Cell currentCell, Cell nextCell)
 	{		
 		float distanceToNext = (currentCell.getSurfaceType().getCode() + nextCell.getSurfaceType().getCode())/2;
-		if(((distanceToNext + distanceToHome)/2) <= CurrentCharge )
-			return true;
+		if((distanceToNext + distanceToHome) >= CurrentCharge )
+			return false;
 		else
 		{
-			return false;
+			return true;
 		}
 	}
 	
