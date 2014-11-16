@@ -97,6 +97,7 @@ public class RobotController {
 	 */
 	public boolean Run()
 	{
+		//TODO - need to add a call to cleaning every time, might need to change validate charge to move a bit
 		boolean moved = false;
 		for(Cell adjCell : currentLocation.getAdjacentCells())
 		{			
