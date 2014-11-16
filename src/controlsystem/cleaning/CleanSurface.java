@@ -25,6 +25,7 @@ public class CleanSurface {
 				//TODO - Verify with the team
 				//if(PowerController.ValidateChargeToMove(pathToStation, home)) { //need path to station still, can this be a hashmap?
 					DirtBag.addDirt();
+					System.out.println("Cleaned cell");
 					currentLocation.setDirtUnits(currentLocation.getDirtUnits() - 1);
 				//}else {
 					mover.Run(); //TODO input pathToStation? May need to rewrite this to take the current cell as input
