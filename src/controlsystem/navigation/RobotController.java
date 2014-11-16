@@ -119,7 +119,9 @@ public class RobotController {
 				{
 					Util.botLog("Robot needs to go home");
 					System.out.println("Last visited cell: "+this.mapHistory.getLastCell().toString());
-					this.RobotToHome();
+					//this.RobotToHome();
+					this.goHome();
+					PowerController.ChargeBattery();
 					Util.botLog("Resuming from home to "+this.mapHistory.getLastCell().toString());
 					this.currentLocation = this.mapHistory.getLastCell();
 				}
