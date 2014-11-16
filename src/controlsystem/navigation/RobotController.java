@@ -1,6 +1,8 @@
 package controlsystem.navigation;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 
 import simulator.util.Util;
@@ -62,7 +64,7 @@ public class RobotController {
 	/**
 	 * Sends the robot home.  Assumes the mapHistory has been kept up-to-date and such!
 	 */
-	private void goHome(){
+	private void goHome() {
 		
 		Util.botLog( "\nRobot is heading home!");
 		
@@ -77,6 +79,44 @@ public class RobotController {
 			logMovement( currentLocation, nextCell );
 			setCurrentLocation( nextCell );
 		}
+	}
+	
+	/**
+	 * Sends the robot from home to the last cell it was at before returning.  Assumes the mapHistory has been kept up-to-date and such!
+	 */
+	private void returnToLast() {
+		
+		Util.botLog( "\nRobot is resuming its task!");
+		
+		ArrayList<Cell> pathHome = new ArrayList<Cell>();
+		
+		HashMap<Cell, Cell> hashHome = mapHistory.getPathToHome();
+		
+		Cell homeStation = new Cell( 0, 0 );  //TODO: Shouldn't this be a member variable?
+		
+		Cell dummyCurrentLocation = this.mapHistory.getLastCell();;
+		
+		//re-builds the path home into an array
+		while( !dummyCurrentLocation.equals( homeStation ) ){
+			Cell nextCell = hashHome.get( dummyCurrentLocation );
+			
+			pathHome.add( nextCell );
+		}
+		
+		//removes the 'home' location, since we're already there.
+		pathHome.remove( pathHome.size() - 1 );
+		
+		//reverses it so it's traversed from home to the last cell visited
+		Collections.reverse( pathHome );
+		
+		for( Cell loc : pathHome ) {
+			
+			PowerController.ReduceCharge( currentLocation, loc );
+			logMovement( currentLocation, loc );
+			setCurrentLocation( loc );
+			
+		}
+		
 	}
 	
 	/**
