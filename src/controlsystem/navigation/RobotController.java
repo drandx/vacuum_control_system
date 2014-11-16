@@ -104,8 +104,8 @@ public class RobotController {
 			if(((adjCell.getState() == CellState.OPEN) || (adjCell.getState() == CellState.UNKNOWN)) && (!this.mapHistory.containsCell(adjCell)))
 			{
 				Cell nextCell = this.sensor.getCellDetail(adjCell.getPosition());
-				Util.botLog("Distance to go home: "+this.mapHistory.getDistToHome());
 				Util.botLog("Charge before movement: "+PowerController.GetCurrentCharge());
+				Util.botLog("Distance to go home before movment: "+this.mapHistory.getDistToHome());
 				if(PowerController.ValidateChargeToMove(this.mapHistory.getDistToHome(),this.currentLocation, nextCell))
 				{
 					logMovement( currentLocation, nextCell );			

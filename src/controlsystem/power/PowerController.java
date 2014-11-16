@@ -1,4 +1,5 @@
 package controlsystem.power;
+import simulator.util.Util;
 import controlsystem.model.Cell;
 import controlsystem.model.Constants;
 
@@ -8,7 +9,6 @@ public class PowerController {
 	public static void ReduceCharge(Cell initPosition, Cell finalPosition)
 	{
 		CurrentCharge = CurrentCharge - ((initPosition.getSurfaceType().getCode() + finalPosition.getSurfaceType().getCode())/2);
-		System.out.println("Current Charge: "+CurrentCharge);
 	}
 	
 	/**
@@ -21,6 +21,7 @@ public class PowerController {
 	public static boolean ValidateChargeToMove(float distanceToHome,Cell currentCell, Cell nextCell)
 	{		
 		float distanceToNext = (currentCell.getSurfaceType().getCode() + nextCell.getSurfaceType().getCode())/2;
+		Util.botLog("Distance to the next cell before movement: "+distanceToNext);
 		if((distanceToNext + distanceToHome) >= CurrentCharge )
 			return false;
 		else
