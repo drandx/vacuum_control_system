@@ -13,5 +13,10 @@ private static float CurrentBag = 0;
 	public static float getCurrentBag() {
 		return CurrentBag;
 	}
+	
+	public static void resetDirtBag()
+	{
+		CurrentBag = 0;
+	}
 
 }

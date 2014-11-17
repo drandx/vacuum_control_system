@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import simulator.util.Util;
+import controlsystem.cleaning.CleanSurface;
+import controlsystem.cleaning.DirtBag;
 import controlsystem.model.Cell;
 import controlsystem.model.CellState;
 import controlsystem.power.PowerController;
@@ -79,6 +81,7 @@ public class RobotController {
 			logMovement( currentLocation, nextCell );
 			setCurrentLocation( nextCell );
 		}
+		Util.botLog("\nRobot is home!!");
 	}
 	
 	/**
@@ -126,7 +129,7 @@ public class RobotController {
 	 */
 	private void logMovement( Cell currentCell, Cell nextCell ){
 		
-		String logString = "\nBot is moving from (" + currentCell.getPosition().getX() + "," + currentCell.getPosition().getY() + ") - to (" + nextCell.getPosition().getX() + "," + nextCell.getPosition().getY() + ").";
+		String logString = "Bot is moving from (" + currentCell.getPosition().getX() + "," + currentCell.getPosition().getY() + ") - to (" + nextCell.getPosition().getX() + "," + nextCell.getPosition().getY() + ").";
 		Util.botLog(logString);		
 		
 	}
@@ -146,10 +149,10 @@ public class RobotController {
 				Cell nextCell = this.sensor.getCellDetail(adjCell.getPosition());
 				Util.botLog("Charge before movement: "+PowerController.GetCurrentCharge());
 				Util.botLog("Distance to go home before movment: "+this.mapHistory.getDistToHome());
-				if(PowerController.ValidateChargeToMove(this.mapHistory.getDistToHome(),this.currentLocation, nextCell))
+				boolean cleanedSurface = CleanSurface.cleanCell(this.currentLocation);
+				if((cleanedSurface) &&  (PowerController.ValidateChargeToMove(this.mapHistory.getDistToHome(),this.currentLocation, nextCell)))
 				{
-					logMovement( currentLocation, nextCell );			
-					
+					logMovement( currentLocation, nextCell );	
 					PowerController.ReduceCharge(this.currentLocation, nextCell);					
 					this.currentLocation = nextCell;
 					this.mapHistory.addHistory(nextCell);
@@ -158,11 +161,12 @@ public class RobotController {
 				}
 				else
 				{
-					Util.botLog("Robot needs to go home");
+					Util.botLog("\nRobot needs to go home");
 					System.out.println("Last visited cell: "+this.mapHistory.getLastCell().toString());
 					//this.RobotToHome();
 					this.goHome();
 					PowerController.ChargeBattery();
+					DirtBag.resetDirtBag();
 					Util.botLog("Resuming from home to "+this.mapHistory.getLastCell().toString());
 					this.currentLocation = this.mapHistory.getLastCell();
 				}
