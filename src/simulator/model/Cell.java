@@ -101,7 +101,13 @@ public class Cell
 	
 	@Override
     public String toString() {
-        return this.xs+" " + this.ys + " " + this.ss + " " + this.ps + " " + this.cs;
+		StringBuilder sb = new StringBuilder();
+		sb.append("\n xs: "+getXs());
+		sb.append(" ys: "+getYs());
+		sb.append(" cs: "+getCs());
+		sb.append(" ps: "+getPs());
+		sb.append(" ds: "+getDs());
+        return sb.toString();
     }
 }
 
