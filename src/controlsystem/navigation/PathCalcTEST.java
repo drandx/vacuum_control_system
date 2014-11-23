@@ -1,9 +1,8 @@
 package controlsystem.navigation;
 
-import static org.junit.Assert.*;
-import junit.framework.Assert;
 import junit.framework.TestCase;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import controlsystem.model.Cell;
@@ -14,8 +13,7 @@ public class PathCalcTEST extends TestCase {
 	public PathCalcTEST(String name) {
 		super(name);
 	}
-
-	@SuppressWarnings("deprecation")
+	
 	@Test
 	public void testPath() {
 		Cell c1 = new Cell(0,0);
